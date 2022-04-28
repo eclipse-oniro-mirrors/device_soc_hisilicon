@@ -1,0 +1,2 @@
+hi3516dv300/sdk_linux/sample/taurus/histreaming_server/lib/libhistreaminglink.a filter=lfs diff=lfs merge=lfs -text
+hi3861v100/sdk_liteos/build/libs/libhistreaminglink.a filter=lfs diff=lfs merge=lfs -text
