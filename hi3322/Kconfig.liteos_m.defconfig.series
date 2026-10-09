@@ -1,0 +1,5 @@
+if SOC_SERIES_HI3322
+config SOC_SERIES
+    string
+    default "hi3322"
+endif

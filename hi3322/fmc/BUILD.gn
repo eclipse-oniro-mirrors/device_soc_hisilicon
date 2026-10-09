@@ -1,0 +1,138 @@
+# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2026. All rights reserved.
+# fbb FMC (SPI-NAND controller) driver ported for morpheus liteos_m.
+# (NAND_PORTING_PLAN.md v3)
+#
+# Sources are the fbb trees (drivers/chips/3322/fmc + porting/fmc) plus two
+# adaptation groups:
+#   compat/           dpal shim (mux/sync driver model/heap/mtd_list) +
+#                     stub headers + patched mtd_common.h/dpal.h
+#   nand_lfs_bridge.c littlefs PartitionCfg callbacks + volume registration
+#
+# Same static_library pattern as ../sfc/BUILD.gn and ../mmc/BUILD.gn (see the
+# note in mmc/BUILD.gn about avoiding liteos.gni kernel_module). Driver
+# sources stay fbb-verbatim except nand/nand_init.c (yaffs mount backend
+# swapped for the bridge) and porting/fmc_porting.c (bootloader register
+# sequence, no fbb PMU framework).
+#
+# Board alignment (NAND_PORTING_PLAN.md 2.2): fbb three-volume layout
+# /boot /system /user at 5%/25%/70% from block 1, two-phase
+# nandflash_filesystem_init(true/false), FS = littlefs.
+
+config("public") {
+  configs = []
+}
+
+# Backend switch (YAFFS2_BINARY_LIB_PORTING_PLAN.md decision B): "yaffs"
+# mounts the fbb CLOSED prebuilt libyaffs2.a (third_party/yaffs2/prebuilt,
+# linked via board BUILD.gn ldflags) + the OH-VFS adapter
+# (kernel/liteos_m/fs/yaffs2, which also carries the libc symbol floor
+# for the archive) + this bridge; "littlefs" keeps the v3 nand_lfs_bridge.
+# nand_init.c picks the register/mount calls at compile time via
+# BOARD_NAND_BACKEND_*.
+#
+# Closed-archive notes: the adapt glue (osglue/nandcfg/mtd_nandcfg) lives
+# INSIDE the archive — this library only compiles the bridge. n_caches is
+# BAKED IN at 20 and cannot be configured here.
+if (board_nand_backend == "yaffs") {
+  fmc_yaffs_sources = [
+    "yaffs/nand_yaffs_bridge.c",
+    # C4 on-board image-compat test (embedded fbb mkyaffs2image fixture,
+    # third_party/yaffs2/include/c4_fixture.h)
+    "yaffs/nand_yaffs_c4.c",
+  ]
+  fmc_yaffs_defines = [
+    "BOARD_NAND_BACKEND_YAFFS=1",
+    "NAND_YAFFS_POOL_BYTES=${board_nand_yaffs_pool_bytes}",
+    "NAND_YAFFS_TRACE_MASK=${board_nand_yaffs_trace}",
+  ]
+  if (board_nand_yaffs_erase_first) {
+    fmc_yaffs_defines += [ "BOARD_NAND_YAFFS_ERASE_FIRST=1" ]
+  }
+  fmc_yaffs_includes = [
+    # yaffs2 authoritative fbb header set (UNPATCHED fbb originals — do not
+    # substitute the morpheus source-route headers)
+    "//device/soc/hisilicon/hi3322/yaffs2/include/yaffs2",
+    "//device/soc/hisilicon/hi3322/yaffs2/include/yaffs2/direct",
+    "//device/soc/hisilicon/hi3322/yaffs2/include/yaffs2/os_adapt/adapt_liteos",
+    # mtd_partition.h (fbb contract header)
+    "//device/soc/hisilicon/hi3322/yaffs2/include",
+  ]
+} else {
+  fmc_yaffs_sources = []
+  fmc_yaffs_defines = [ "BOARD_NAND_BACKEND_LITTLEFS=1" ]
+  fmc_yaffs_includes = []
+}
+
+static_library("fmc") {
+  sources = [
+    # fbb driver core
+    "common/nand.c",
+    "common/nand_fmc.c",
+    "common/nand_ids.c",
+    "common/nand_ops.c",
+    "common/nand_scan.c",
+    # fbb controller layer
+    "nand/hifmc100/hifmc100.c",
+    "nand/hifmc100/hifmc_common.c",
+    # fbb chip-specific glue (DS35M1GA OOB remap) + init
+    "nand/nandflash_ds35x1g.c",
+    "nand/nand_init.c",
+    # board porting (bootloader register sequence)
+    "porting/fmc_porting.c",
+    # adaptation
+    "compat/dpal_shim.c",
+    "nand_lfs_bridge.c",
+  ] + fmc_yaffs_sources
+
+  include_dirs = [
+    # fmc shim first: stubs (asm/*, fs/fs.h, linux/module.h, pm_veto.h),
+    # patched mtd_common.h, NAND-prefixed debug_print.h
+    "compat",
+    # dpal framework headers (fbb verbatim, two small patches)
+    "compat/dpal",
+    # compact linux/mtd headers (mtd.h / mtd_list.h / mtd-abi.h)
+    "compat/linux",
+    # local headers: nand_lfs_bridge.h
+    "include",
+    # fbb hifmc100 register headers (hifmc100.h, hifmc_regs.h, ...)
+    "include/hifmc100",
+    # fmc_porting.h (fbb include/shared copy)
+    "include/shared",
+    # shared shims reused from the SFC port: tcxo.h, watchdog.h, errcode.h,
+    # common_def.h, soc_osal.h, panic.h ...
+    "//device/soc/hisilicon/hi3322/sfc/compat",
+    # chip headers shared with the mmc port (soc_reg.h, 3322_*_reg_offset.h,
+    # chip-wide nand*.h — hash-identical with fbb) + chip_io.h via compat_include
+    "//device/soc/hisilicon/hi3322/mmc/porting/chip_include/shared",
+    "//device/soc/hisilicon/hi3322/mmc/porting/chip_include/acore",
+    "//device/soc/hisilicon/hi3322/mmc/porting/chip_include/targets/3322_app_include",
+    "//device/soc/hisilicon/hi3322/mmc/porting/chip_include/product",
+    "//device/soc/hisilicon/hi3322/mmc/compat_include",
+    # compat_fix.h (debug_print.h includes it; also force-included via cflags)
+    "//device/soc/hisilicon/hi3322/mmc/shim",
+    # board headers: the watchdog shim's nested watchdog.h ->
+    # hi3322_watchdog_feed declaration (same dirs as the sfc port)
+    "//device/board/hisilicon/hispark_hiditing/liteos_m/board/include",
+    "//device/board/hisilicon/hispark_hiditing/liteos_m/board/include/asm",
+  ] + fmc_yaffs_includes
+
+  defines = [
+    # libc feature macros, same as the sfc/mmc port command line (_ALL_SOURCE
+    # activates the BSD typedefs in musl sys/types.h: u_int, u_char, ...)
+    "_ALL_SOURCE",
+    "_GNU_SOURCE",
+    "__LITEOS__",
+  ] + fmc_yaffs_defines
+
+  cflags = [
+    # fbb dprintf -> liteos_m LkDprintf (same shim as the sfc/mmc ports)
+    "-include",
+    rebase_path("../mmc/shim/compat_fix.h", root_build_dir),
+    "-Wno-error",
+  ]
+
+  configs += [
+    "//kernel/liteos_m:public",
+    "//kernel/liteos_m:los_config",
+  ]
+}

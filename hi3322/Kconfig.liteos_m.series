@@ -1,0 +1,11 @@
+config SOC_SERIES_HI3322
+    bool "HiSilicon HI3322 Series"
+    depends on PLATFORM_HI3322
+    select ARCH_RISCV32
+    select SOC_COMPANY_HISILICON
+    help
+        Enable support for HiSilicon HI3322 Series
+
+config SOC_COMPANY
+    string
+    default "hisilicon" if PLATFORM_HI3322

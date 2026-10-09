@@ -1,0 +1,65 @@
+# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2026. All rights reserved.
+# SFC (SPI-NOR controller) driver ported for morpheus liteos_m.
+#
+#   nor_lfs_bridge.c  littlefs PartitionCfg callbacks + 3-volume mount
+
+config("public") {
+  configs = []
+}
+
+static_library("sfc") {
+  sources = [
+    # HAL (SFC v150 register ops)
+    "hal/hal_sfc.c",
+    "hal/hal_sfc_v150.c",
+    "hal/hal_sfc_v150_regs_op.c",
+    # ITCM-resident flash writer (XIP-constrained program/erase path)
+    "hal/nor_flash_itcm.c",
+    # driver layer
+    "drv/sfc.c",
+    # chip porting
+    "porting/sfc_porting.c",
+    "porting/sfc_config_info.c",
+    # adaptation
+    "compat/osal_shim.c",
+    "nor_lfs_bridge.c",
+  ]
+
+  include_dirs = [
+    # shim first: osal_adapt/soc_osal/tcxo/watchdog/panic/debug_print/etc.
+    "compat",
+    # public driver header (sfc_v2.h)
+    "include/driver",
+    "hal",
+    "drv",
+    "porting",
+    # board headers (watchdog.h: WDT key/feed for the ITCM writer)
+    "//device/board/hisilicon/hispark_hiditing/liteos_m/board/include",
+    "//device/board/hisilicon/hispark_hiditing/liteos_m/board/include/asm",
+    "//device/soc/hisilicon/hi3322/sdk/open_source/libboundscheck/include",
+  ]
+
+  defines = [
+    "SFC_DEBUG=1",
+    "SFC_SUPPORT_DMA=1",
+    # task-context mutex instead of global IRQ lock (sfc_porting.c ifdef)
+    "SFC_USE_MUTEX=1",
+    # libc feature macros, same as the mmc port command line
+    "_ALL_SOURCE",
+    "_GNU_SOURCE",
+    "__LITEOS__",
+  ]
+
+  cflags = [
+    "-include",
+    rebase_path("compat/compat_fix.h", root_build_dir),
+    "-include",
+    rebase_path("compat/common_def.h", root_build_dir),
+    "-Wno-error",
+  ]
+
+  configs += [
+    "//kernel/liteos_m:public",
+    "//kernel/liteos_m:los_config",
+  ]
+}

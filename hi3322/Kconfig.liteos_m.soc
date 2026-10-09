@@ -1,0 +1,9 @@
+choice
+    prompt "HI3322 series SoC"
+    depends on SOC_SERIES_HI3322
+
+config SOC_HI3322V100
+    bool "SoC HI3322V100"
+    default y
+
+endchoice

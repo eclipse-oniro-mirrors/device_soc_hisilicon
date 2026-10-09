@@ -1,0 +1,15 @@
+# Copyright (C) 2026 Hisilicon (Shanghai) Technologies Co., Ltd. All rights reserved.
+
+if (ohos_kernel_type == "liteos_m") {
+  import("//kernel/liteos_m/liteos.gni")
+  module_name = get_path_info(rebase_path("."), "name")
+  module_group(module_name) {
+    modules = []
+    if (defined(LOSCFG_FS_LITTLEFS)) {
+      modules = [ "sfc" ]
+    }
+    modules += [ "fmc" ]
+  }
+} else {
+
+}
