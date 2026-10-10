@@ -1,0 +1,18 @@
+Open Source License
+===================
+
+yaffs2 is a NAND-flash file system by Aleph One Ltd.
+Upstream: https://github.com/Aleph-One-Ltd/yaffs2
+Headers in this tree are LGPL-2.1; yaffs C code is GPL-2.0.
+
+This directory ships yaffs2 as a CLOSED-SOURCE, PREBUILT static archive
+(prebuilt/libyaffs2.a) taken from the HiSilicon fbb SDK (see
+prebuilt/ORIGIN.md for provenance, integrity hashes and the reproducible
+e_flags normalization applied by tools/patch_eflags.py).
+
+Redistribution and use of this archive within company-internal build
+environments follows the fbb/HiSilicon SDK license terms (internal use
+confirmed for this project). If the product moves to external
+distribution, the archive must either be replaced by an
+equivalently-licensed build from the upstream GPL-2.0 sources or the
+shipment must comply with the applicable license of the SDK binary.

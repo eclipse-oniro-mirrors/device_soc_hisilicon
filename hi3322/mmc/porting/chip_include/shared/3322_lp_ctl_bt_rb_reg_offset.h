@@ -1,0 +1,121 @@
+/*
+ * Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2025-2025. All rights reserved.
+ * File name     :  3322_lp_ctl_bt_rb_reg_offset.h
+ * Project line  :  Platform And Key Technologies Development
+ * Department    :  CAD Development Department
+ * Author        :  l00444884
+ * Version       :  1.0
+ * Date          :  2025/10/09
+ * Description   :  The description of xxx project
+ * Others        :  Generated automatically by nManager V5.1
+ * History       :  l00444884 2025/03/05 17:25:13 Create file
+ */
+
+#ifndef __3322_LP_CTL_BT_RB_REG_OFFSET_H__
+#define __3322_LP_CTL_BT_RB_REG_OFFSET_H__
+
+/* LP_CTL_BT_RB Base address of Module's Register */
+#define LP_CTL_BT_RB_BASE                       (0x57006000)
+
+/******************************************************************************/
+/*                      LP_CTL_BT_RB Registers' Definitions                            */
+/******************************************************************************/
+
+#define LP_CTL_BT_RB_CFG_LP_CTL_BT_ID_REG             (LP_CTL_BT_RB_BASE + 0x0)   /* LP_CTL_BTID寄存器 */
+#define LP_CTL_BT_RB_CFG_LP_CTL_BT_GP_REG1_REG        (LP_CTL_BT_RB_BASE + 0x4)   /* 通用寄存器 */
+#define LP_CTL_BT_RB_CFG_LP_CTL_BT_GP_REG2_REG        (LP_CTL_BT_RB_BASE + 0x8)   /* 通用寄存器 */
+#define LP_CTL_BT_RB_CFG_LP_CTL_BT_GP_REG3_REG        (LP_CTL_BT_RB_BASE + 0xC)   /* 通用寄存器 */
+#define LP_CTL_BT_RB_CFG_LP_CTL_BT_GP_REG4_REG        (LP_CTL_BT_RB_BASE + 0x10)  /* 通用寄存器 */
+#define LP_CTL_BT_RB_LP_CTL_BT_RXD_IN_SEL_REG         (LP_CTL_BT_RB_BASE + 0x50)  /* LP_CTL_BT_RXD_IN_SEL */
+#define LP_CTL_BT_RB_LP_CTL_BT_INTR_EN_REG            (LP_CTL_BT_RB_BASE + 0x100) /* LP_CTL_BT_INTR_EN */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_EN_REG            (LP_CTL_BT_RB_BASE + 0x150) /* LP_CTL_BT_WKUP_EN */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_STS_REG           (LP_CTL_BT_RB_BASE + 0x200) /* LP_CTL_BT_WKUP_STS */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_CLR_REG           (LP_CTL_BT_RB_BASE + 0x250) /* LP_CTL_BT_WKUP_CLR */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_INT_EN_REG        (LP_CTL_BT_RB_BASE + 0x300) /* LP_CTL_BT_WKUP_INT_EN */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_INT_STS_REG       (LP_CTL_BT_RB_BASE + 0x350) /* LP_CTL_BT_WKUP_INT_STS */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_INT_CLR_REG       (LP_CTL_BT_RB_BASE + 0x400) /* LP_CTL_BT_WKUP_INT_CLR */
+#define LP_CTL_BT_RB_LP_CTL_BT_ALLOW_TO_SLEEP_REG     (LP_CTL_BT_RB_BASE + 0x450) /* LP_CTL_BT_ALLOW_TO_SLEEP */
+#define LP_CTL_BT_RB_LP_CTL_BT_WORK_VAL_REG           (LP_CTL_BT_RB_BASE + 0x460) /* LP_CTL_BT_WORK_VAL */
+#define LP_CTL_BT_RB_LP_CTL_BT_SLP_EN_REG             (LP_CTL_BT_RB_BASE + 0x464) /* LP_CTL_BT_SLP_EN */
+#define LP_CTL_BT_RB_LP_CTL_BT_SLP_CLR_REG            (LP_CTL_BT_RB_BASE + 0x468) /* LP_CTL_BT_SLP_CLR */
+#define LP_CTL_BT_RB_LP_CTL_BT_SLP_STS_REG            (LP_CTL_BT_RB_BASE + 0x46C) /* LP_CTL_BT_SLP_STS */
+#define LP_CTL_BT_RB_LP_CTL_BT_SLP_INT_EN_REG         (LP_CTL_BT_RB_BASE + 0x470) /* LP_CTL_BT_SLP_INT_EN */
+#define LP_CTL_BT_RB_LP_CTL_BT_SLP_INT_CLR_REG        (LP_CTL_BT_RB_BASE + 0x474) /* LP_CTL_BT_SLP_INT_CLR */
+#define LP_CTL_BT_RB_LP_CTL_BT_SLP_INT_STS_REG        (LP_CTL_BT_RB_BASE + 0x478) /* LP_CTL_BT_SLP_INT_STS */
+#define LP_CTL_BT_RB_LP_CTL_BT_SLP_VAL_REG            (LP_CTL_BT_RB_BASE + 0x550) /* LP_CTL_BT_SLP_VAL */
+#define LP_CTL_BT_RB_LP_CTL_BT_FRC_ZERO_REG           (LP_CTL_BT_RB_BASE + 0x600) /* LP_CTL_BT_FRC_ZERO */
+#define LP_CTL_BT_RB_LP_CTL_BT_FRC_ONE_REG            (LP_CTL_BT_RB_BASE + 0x650) /* LP_CTL_BT_FRC_ONE */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_FRC_REG            (LP_CTL_BT_RB_BASE + 0x700) /* LP_CTL_BT_MAN_FRC */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_FRC_1_REG          (LP_CTL_BT_RB_BASE + 0x704) /* LP_CTL_BT_MAN_FRC_1 */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_FRC_2_REG          (LP_CTL_BT_RB_BASE + 0x708) /* LP_CTL_BT_MAN_FRC_2 */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_FRC_3_REG          (LP_CTL_BT_RB_BASE + 0x70C) /* LP_CTL_BT_MAN_FRC_3 */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_FRC_4_REG          (LP_CTL_BT_RB_BASE + 0x710) /* LP_CTL_BT_MAN_FRC_4 */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_FRC_OFF_REG        (LP_CTL_BT_RB_BASE + 0x850) /* LP_CTL_BT_MAN_FRC_OFF */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_FRC_OFF_1_REG      (LP_CTL_BT_RB_BASE + 0x854) /* LP_CTL_BT_MAN_FRC_OFF_1 */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_FRC_OFF_2_REG      (LP_CTL_BT_RB_BASE + 0x858) /* LP_CTL_BT_MAN_FRC_OFF_2 */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_FRC_OFF_3_REG      (LP_CTL_BT_RB_BASE + 0x85C) /* LP_CTL_BT_MAN_FRC_OFF_3 */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_FRC_OFF_4_REG      (LP_CTL_BT_RB_BASE + 0x860) /* LP_CTL_BT_MAN_FRC_OFF_4 */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_FRC_ON_SEQ_REG     (LP_CTL_BT_RB_BASE + 0x864) /* LP_CTL_BT_MAN_FRC_ON_SEQ */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_FRC_OFF_SEQ_REG    (LP_CTL_BT_RB_BASE + 0x868) /* LP_CTL_BT_MAN_FRC_OFF_SEQ */
+#define LP_CTL_BT_RB_LP_CTL_BT_WAIT_OVER_TIME_CFG_REG (LP_CTL_BT_RB_BASE + 0x86C) /* LP_CTL_BT_WAIT_OVER_TIME_CFG */
+#define LP_CTL_BT_RB_LP_CTL_BT_ACK_BYPASS_REG         (LP_CTL_BT_RB_BASE + 0x870) /* LP_CTL_BT_ACK_BYPASS */
+#define LP_CTL_BT_RB_LP_CTL_BT_SEQ_DELAY_CNT_REG      (LP_CTL_BT_RB_BASE + 0x874) /* LP_CTL_BT_SEQ_DELAY_CNT */
+#define LP_CTL_BT_RB_LP_CTL_BT_SEQ_CUR_STS_REG        (LP_CTL_BT_RB_BASE + 0x878) /* LP_CTL_BT_SEQ_CUR_STS */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_SEL_REG            (LP_CTL_BT_RB_BASE + 0x900) /* LP_CTL_BT_MAN_SEL */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_SEL_1_REG          (LP_CTL_BT_RB_BASE + 0x904) /* LP_CTL_BT_MAN_SEL_1 */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_REG                (LP_CTL_BT_RB_BASE + 0x950) /* LP_CTL_BT_MAN */
+#define LP_CTL_BT_RB_LP_CTL_BT_MAN_1_REG              (LP_CTL_BT_RB_BASE + 0x954) /* LP_CTL_BT_MAN_1 */
+#define LP_CTL_BT_RB_LP_CTL_BT_STS_REG                (LP_CTL_BT_RB_BASE + 0xA00) /* LP_CTL_BT_STS */
+#define LP_CTL_BT_RB_LP_CTL_BT_STS_1_REG              (LP_CTL_BT_RB_BASE + 0xA04) /* LP_CTL_BT_STS_1 */
+#define LP_CTL_BT_RB_LP_CTL_BT_STS_2_REG              (LP_CTL_BT_RB_BASE + 0xA08) /* LP_CTL_BT_STS_2 */
+#define LP_CTL_BT_RB_LP_CTL_BT_STS_3_REG              (LP_CTL_BT_RB_BASE + 0xA0C) /* LP_CTL_BT_STS_3 */
+#define LP_CTL_BT_RB_LP_CTL_BT_STS_4_REG              (LP_CTL_BT_RB_BASE + 0xA10) /* LP_CTL_BT_STS_4 */
+#define LP_CTL_BT_RB_LP_CTL_BT_FRC_REG                (LP_CTL_BT_RB_BASE + 0xB00) /* LP_CTL_BT_FRC */
+#define LP_CTL_BT_RB_LP_CTL_BT_FRC_1_REG              (LP_CTL_BT_RB_BASE + 0xB04) /* LP_CTL_BT_FRC_1 */
+#define LP_CTL_BT_RB_LP_CTL_BT_FRC_OFF_REG            (LP_CTL_BT_RB_BASE + 0xC00) /* LP_CTL_BT_FRC_OFF */
+#define LP_CTL_BT_RB_LP_CTL_BT_FRC_OFF_1_REG          (LP_CTL_BT_RB_BASE + 0xC04) /* LP_CTL_BT_FRC_OFF_1 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_REG          (LP_CTL_BT_RB_BASE + 0xC08) /* LP_CTL_BT_WKUP_TIME */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_1_REG        (LP_CTL_BT_RB_BASE + 0xC0C) /* LP_CTL_BT_WKUP_TIME_1 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_2_REG        (LP_CTL_BT_RB_BASE + 0xC10) /* LP_CTL_BT_WKUP_TIME_2 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_3_REG        (LP_CTL_BT_RB_BASE + 0xC14) /* LP_CTL_BT_WKUP_TIME_3 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_4_REG        (LP_CTL_BT_RB_BASE + 0xC18) /* LP_CTL_BT_WKUP_TIME_4 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_5_REG        (LP_CTL_BT_RB_BASE + 0xC1C) /* LP_CTL_BT_WKUP_TIME_5 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_6_REG        (LP_CTL_BT_RB_BASE + 0xC20) /* LP_CTL_BT_WKUP_TIME_6 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_7_REG        (LP_CTL_BT_RB_BASE + 0xC24) /* LP_CTL_BT_WKUP_TIME_7 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_8_REG        (LP_CTL_BT_RB_BASE + 0xC28) /* LP_CTL_BT_WKUP_TIME_8 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_9_REG        (LP_CTL_BT_RB_BASE + 0xC2C) /* LP_CTL_BT_WKUP_TIME_9 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_10_REG       (LP_CTL_BT_RB_BASE + 0xC30) /* LP_CTL_BT_WKUP_TIME_10 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_11_REG       (LP_CTL_BT_RB_BASE + 0xC34) /* LP_CTL_BT_WKUP_TIME_11 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_12_REG       (LP_CTL_BT_RB_BASE + 0xC38) /* LP_CTL_BT_WKUP_TIME_12 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_13_REG       (LP_CTL_BT_RB_BASE + 0xC3C) /* LP_CTL_BT_WKUP_TIME_13 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_14_REG       (LP_CTL_BT_RB_BASE + 0xC40) /* LP_CTL_BT_WKUP_TIME_14 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_15_REG       (LP_CTL_BT_RB_BASE + 0xC44) /* LP_CTL_BT_WKUP_TIME_15 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_16_REG       (LP_CTL_BT_RB_BASE + 0xC48) /* LP_CTL_BT_WKUP_TIME_16 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_17_REG       (LP_CTL_BT_RB_BASE + 0xC4C) /* LP_CTL_BT_WKUP_TIME_17 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_18_REG       (LP_CTL_BT_RB_BASE + 0xC50) /* LP_CTL_BT_WKUP_TIME_18 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_19_REG       (LP_CTL_BT_RB_BASE + 0xC54) /* LP_CTL_BT_WKUP_TIME_19 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_20_REG       (LP_CTL_BT_RB_BASE + 0xC58) /* LP_CTL_BT_WKUP_TIME_20 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_21_REG       (LP_CTL_BT_RB_BASE + 0xC5C) /* LP_CTL_BT_WKUP_TIME_21 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_22_REG       (LP_CTL_BT_RB_BASE + 0xC60) /* LP_CTL_BT_WKUP_TIME_22 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_23_REG       (LP_CTL_BT_RB_BASE + 0xC64) /* LP_CTL_BT_WKUP_TIME_23 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_24_REG       (LP_CTL_BT_RB_BASE + 0xC68) /* LP_CTL_BT_WKUP_TIME_24 */
+#define LP_CTL_BT_RB_LP_CTL_BT_WKUP_TIME_25_REG       (LP_CTL_BT_RB_BASE + 0xC6C) /* LP_CTL_BT_WKUP_TIME_25 */
+#define LP_CTL_BT_RB_LP_CTL_BT_PWR_ACK_REG            (LP_CTL_BT_RB_BASE + 0xC70) /* LP_CTL_BT_PWR_ACK */
+#define LP_CTL_BT_RB_LP_CTL_BT_HISTORY_REG            (LP_CTL_BT_RB_BASE + 0xC74) /* LP_CTL_BT_HISTORY */
+#define LP_CTL_BT_RB_LP_CTL_BT_COMPLETE_SEL_REG       (LP_CTL_BT_RB_BASE + 0xC78) /* LP_CTL_BT_COMPLETE_SEL */
+#define LP_CTL_BT_RB_LP_CTL_BT_SLEEPING_REG           (LP_CTL_BT_RB_BASE + 0xC7C) /* LP_CTL_BT_SLEEPING */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_REG                (LP_CTL_BT_RB_BASE + 0xD00) /* LP_CTL_BT_DEF */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_1_REG              (LP_CTL_BT_RB_BASE + 0xD04) /* LP_CTL_BT_DEF_1 */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_2_REG              (LP_CTL_BT_RB_BASE + 0xD08) /* LP_CTL_BT_DEF_2 */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_3_REG              (LP_CTL_BT_RB_BASE + 0xD0C) /* LP_CTL_BT_DEF_3 */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_4_REG              (LP_CTL_BT_RB_BASE + 0xD10) /* LP_CTL_BT_DEF_4 */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_5_REG              (LP_CTL_BT_RB_BASE + 0xD14) /* LP_CTL_BT_DEF_5 */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_6_REG              (LP_CTL_BT_RB_BASE + 0xD18) /* LP_CTL_BT_DEF_6 */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_7_REG              (LP_CTL_BT_RB_BASE + 0xD1C) /* LP_CTL_BT_DEF_7 */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_8_REG              (LP_CTL_BT_RB_BASE + 0xD20) /* LP_CTL_BT_DEF_8 */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_9_REG              (LP_CTL_BT_RB_BASE + 0xD24) /* LP_CTL_BT_DEF_9 */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_10_REG             (LP_CTL_BT_RB_BASE + 0xD28) /* LP_CTL_BT_DEF_10 */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_11_REG             (LP_CTL_BT_RB_BASE + 0xD2C) /* LP_CTL_BT_DEF_11 */
+#define LP_CTL_BT_RB_LP_CTL_BT_DEF_12_REG             (LP_CTL_BT_RB_BASE + 0xD30) /* LP_CTL_BT_DEF_12 */
+
+#endif // __3322_LP_CTL_BT_RB_REG_OFFSET_H__

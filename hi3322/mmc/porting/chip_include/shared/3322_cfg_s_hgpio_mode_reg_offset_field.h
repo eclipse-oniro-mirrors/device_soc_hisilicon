@@ -1,0 +1,81 @@
+/*
+ * Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2025-2025. All rights reserved.
+ * File name     :  3322_cfg_s_hgpio_mode_reg_offset_field.h
+ * Project line  :  Platform And Key Technologies Development
+ * Department    :  CAD Development Department
+ * Author        :  l00444884
+ * Version       :  1.0
+ * Date          :  2025/10/09
+ * Description   :  The description of xxx project
+ * Others        :  Generated automatically by nManager V5.1
+ * History       :  l00444884 2025/03/05 17:25:13 Create file
+ */
+
+#ifndef __3322_CFG_S_HGPIO_MODE_REG_OFFSET_FIELD_H__
+#define __3322_CFG_S_HGPIO_MODE_REG_OFFSET_FIELD_H__
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO0_MODE_LEN	        2
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO0_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO0_MODE_MASK    		0x3
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO1_MODE_LEN	        2
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO1_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO1_MODE_MASK    		0x3
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO2_MODE_LEN	        2
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO2_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO2_MODE_MASK    		0x3
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO3_MODE_LEN	        2
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO3_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO3_MODE_MASK    		0x3
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO4_MODE_LEN	        2
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO4_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO4_MODE_MASK    		0x3
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO5_MODE_LEN	        1
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO5_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO5_MODE_MASK    		0x1
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO6_MODE_LEN	        1
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO6_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO6_MODE_MASK    		0x1
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO7_MODE_LEN	        1
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO7_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO7_MODE_MASK    		0x1
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO8_MODE_LEN	        1
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO8_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO8_MODE_MASK    		0x1
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO9_MODE_LEN	        2
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO9_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO9_MODE_MASK    		0x3
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO10_MODE_LEN	        2
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO10_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO10_MODE_MASK    		0x3
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO11_MODE_LEN	        2
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO11_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO11_MODE_MASK    		0x3
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO12_MODE_LEN	        2
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO12_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO12_MODE_MASK    		0x3
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO13_MODE_LEN	        2
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO13_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO13_MODE_MASK    		0x3
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO14_MODE_LEN	        2
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO14_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO14_MODE_MASK    		0x3
+
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO15_MODE_LEN	        2
+#define	CFG_S_HGPIO_MODE_CFG_S_HGPIO15_MODE_OFFSET	        0
+#define CFG_S_HGPIO_MODE_CFG_S_HGPIO15_MODE_MASK    		0x3
+
+#endif // __3322_CFG_S_HGPIO_MODE_REG_OFFSET_FIELD_H__
