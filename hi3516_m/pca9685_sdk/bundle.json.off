@@ -1,0 +1,35 @@
+{
+  "name": "@openharmony/pca9685_sdk",
+  "description": "PCA9685 (16ch PWM servo, I2C) user-space SDK with Otto biped robot motions, HDF user-mode I2C HDI based.",
+  "version": "1.0",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "kernel/liteos_m/components/embedded_smart/applications/agent_test/pca9685_sdk"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "pca9685_sdk",
+    "subsystem": "applications",
+    "syscap": [],
+    "features": [],
+    "adapted_system_type": [
+      "mini",
+      "small"
+    ],
+    "rom": "",
+    "ram": "",
+    "deps": {
+      "components": [],
+      "third_party": []
+    },
+    "build": {
+      "sub_component": [
+        "//kernel/liteos_m/components/embedded_smart/applications/agent_test/pca9685_sdk:pca9685_group"
+      ],
+      "inner_kits": [],
+      "test": []
+    }
+  }
+}
