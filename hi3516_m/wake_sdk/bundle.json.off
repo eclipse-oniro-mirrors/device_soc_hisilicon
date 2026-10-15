@@ -1,0 +1,35 @@
+{
+  "name": "@openharmony/wake_sdk",
+  "description": "Voice wake-up + realtime dialog for Hi3516DV300 HiSpark Taurus (LiteOS-A): offline 'Luna' wake word (microWakeWord + TFLM soft inference, 16kHz), Qwen-Audio-Realtime WebSocket/TLS dialog, deepseek function-calling agent bridge (say/emoji/act protocol).",
+  "version": "1.0",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+    "destPath": "kernel/liteos_m/components/embedded_smart/applications/agent_test/wake_sdk"
+  },
+  "dirs": {},
+  "scripts": {},
+  "component": {
+    "name": "wake_sdk",
+    "subsystem": "applications",
+    "syscap": [],
+    "features": [],
+    "adapted_system_type": [
+      "mini",
+      "small"
+    ],
+    "rom": "",
+    "ram": "",
+    "deps": {
+      "components": [],
+      "third_party": []
+    },
+    "build": {
+      "sub_component": [
+        "//kernel/liteos_m/components/embedded_smart/applications/agent_test/wake_sdk:wake_group"
+      ],
+      "inner_kits": [],
+      "test": []
+    }
+  }
+}

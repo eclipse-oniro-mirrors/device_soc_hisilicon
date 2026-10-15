@@ -1,0 +1,44 @@
+import("//build/lite/config/component/lite_component.gni")
+
+# PCA9685/Otto 用户态 SDK 集成文件(放进源码树 applications/pca9685_sdk 时生效)
+#
+# 设计:源码直编 —— pca9685_core.c/otto_pca.c 编成 static_library("pca9685"),
+#     pca_demo/app_test 经 dep 复用,不再依赖预编译 .a。
+
+_hdf_include = [
+  "//drivers/hdf_core/framework/include/core",
+  "//drivers/hdf_core/framework/include/osal",
+  "//drivers/hdf_core/framework/include/platform",
+  "//drivers/hdf_core/framework/include/utils",
+  "//drivers/hdf_core/interfaces/inner_api/core",
+  "//drivers/hdf_core/interfaces/inner_api/osal/shared",
+  "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
+  "//drivers/hdf_core/interfaces/inner_api/utils",
+]
+
+# PCA9685 驱动库(I2C HDI 用户态封装, i2c_if_u 经板上 libhdf_platform.so)
+static_library("pca9685") {
+  sources = [
+    "pca9685_core.c",
+    "otto_pca.c",
+  ]
+  include_dirs = _hdf_include
+}
+
+# 板端命令行测试程序(产物 rootfs/bin/pca_demo)
+executable("pca_demo") {
+  sources = [ "pca_demo.c" ]
+  include_dirs = _hdf_include
+  deps = [
+    ":pca9685",
+    "//drivers/hdf_core/adapter/uhdf/platform:hdf_platform",
+  ]
+}
+
+group("pca9685_group") {
+  deps = [ ":pca_demo" ]
+}
+
+lite_component("pca9685_sdk") {
+  features = [ ":pca_demo" ]
+}
