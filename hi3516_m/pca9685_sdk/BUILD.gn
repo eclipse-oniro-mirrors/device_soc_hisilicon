@@ -2,14 +2,8 @@ import("//build/lite/config/component/lite_component.gni")
 
 # PCA9685/Otto 用户态 SDK 集成文件(放进源码树 applications/pca9685_sdk 时生效)
 #
-# 设计:不重编 SDK 源码,直接链包里预编译好的 libpca9685.a;
-#     只从源码编 pca_demo 演示程序,证明 .a 可被 GN 工程正常引用。
-#     想连 .a 也不想要、直接编源码:把 sources 里加上 pca9685_core.c/otto_pca.c
-#     并去掉 libs 即可(需要 -I drivers/hdf_core 各头目录,本文件已带)。
-#
-# 集成步骤见 交付包_PCA9685_v1/量产集成说明.md 第 3 节。
-
-_pca_a = rebase_path("libpca9685.a")
+# 设计:源码直编 —— pca9685_core.c/otto_pca.c 编成 static_library("pca9685"),
+#     pca_demo/app_test 经 dep 复用,不再依赖预编译 .a。
 
 _hdf_include = [
   "//drivers/hdf_core/framework/include/core",
@@ -22,12 +16,23 @@ _hdf_include = [
   "//drivers/hdf_core/interfaces/inner_api/utils",
 ]
 
+# PCA9685 驱动库(I2C HDI 用户态封装, i2c_if_u 经板上 libhdf_platform.so)
+static_library("pca9685") {
+  sources = [
+    "pca9685_core.c",
+    "otto_pca.c",
+  ]
+  include_dirs = _hdf_include
+}
+
 # 板端命令行测试程序(产物 rootfs/bin/pca_demo)
 executable("pca_demo") {
   sources = [ "pca_demo.c" ]
   include_dirs = _hdf_include
-  libs = [ _pca_a ]
-  deps = [ "//drivers/hdf_core/adapter/uhdf/platform:hdf_platform" ]
+  deps = [
+    ":pca9685",
+    "//drivers/hdf_core/adapter/uhdf/platform:hdf_platform",
+  ]
 }
 
 group("pca9685_group") {
