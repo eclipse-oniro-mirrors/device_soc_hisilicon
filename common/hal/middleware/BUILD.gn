@@ -25,6 +25,22 @@ if (defined(ohos_lite)) {
     arch_cflags = string_join(" ", target_arch_cflags)
     arch_cflags += " --target=$target_triple -fuse-ld=lld --rtlib=compiler-rt"
     command = "./build.sh ${outdir} ${board} ${ohos_kernel_type} ${clang_dir} ${sysroot_path} \"${arch_cflags}\""
+    outputs = [
+      "$root_out_dir/libmp4.so",
+      "$root_out_dir/libts.so",
+      "$root_out_dir/libexif.so",
+      "$root_out_dir/libfileformat.so",
+      "$root_out_dir/librecorder_pro.so",
+      "$root_out_dir/libdtcf.so",
+      "$root_out_dir/libfstool.so",
+      "$root_out_dir/libhitimer.so",
+      "$root_out_dir/libmbuf.so",
+      "$root_out_dir/libmwlog.so",
+      "$root_out_dir/libavcodec.so",
+      "$root_out_dir/libavformat.so",
+      "$root_out_dir/libavutil.so",
+      "$root_out_dir/libswresample.so",
+    ]
   }
 } else {
   group("middleware_group") {

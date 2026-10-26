@@ -18,6 +18,24 @@ if (defined(ohos_lite)) {
     exec_path = rebase_path(".", root_build_dir)
     outdir = rebase_path("$root_out_dir")
     command = "./build.sh ${outdir} ${board} ${ohos_kernel_type} ${ohos_build_compiler} ${storage_type}"
+    outputs = [
+      "$root_out_dir/libaudio_hw.so",
+      "$root_out_dir/libaudio_primary_port.so",
+      "$root_out_dir/libcodec.so",
+      "$root_out_dir/libhiaacdec.so",
+      "$root_out_dir/libplugin_adec_35xx.so",
+      "$root_out_dir/libplugin_aenc_35xx.so",
+      "$root_out_dir/libplugin_vdec_35xx.so",
+      "$root_out_dir/libplugin_venc_35xx.so",
+      "$root_out_dir/libformat_hw.so",
+      "$root_out_dir/libplugin_demuxer_ffmpeg.so",
+      "$root_out_dir/libplugin_demuxer_mpf.so",
+      "$root_out_dir/libplugin_demuxer_raw.so",
+      "$root_out_dir/libplugin_muxer_recorder.so",
+      "$root_out_dir/libmedia_hal_common.so",
+      "$root_out_dir/libhdi_camera.so",
+      "$root_out_dir/libhdi_videodisplayer.so",
+    ]
   }
 } else {
   group("hardware_group") {
