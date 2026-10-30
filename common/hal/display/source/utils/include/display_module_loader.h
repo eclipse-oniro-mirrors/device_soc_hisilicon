@@ -19,6 +19,7 @@
 #include <memory>
 #include <string>
 #include <display_common.h>
+#include "display_make_unique.h"
 namespace OHOS {
 namespace HDI {
 namespace DISPLAY {
@@ -33,7 +34,7 @@ public:
                 return nullptr;
             }
         }
-        return std::make_unique<DisplayModuleLoader>(handle);
+        return MakeUnique<DisplayModuleLoader>(handle);
     }
 
     explicit DisplayModuleLoader(void *handle) : handle_(handle) {}

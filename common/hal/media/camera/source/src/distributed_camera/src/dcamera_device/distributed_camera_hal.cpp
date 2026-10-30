@@ -107,12 +107,7 @@ typedef struct {
     vector<string> destoryCamera;
 } DistributedHalContext;
 
-DistributedHalContext g_distributedHalMgr = {
-    .inited = false,
-    .displayLayer = nullptr,
-    .cameraDetect = nullptr,
-    .dCameraProvider = nullptr,
-};
+DistributedHalContext g_distributedHalMgr = {};
 
 static int32_t GetFreeStreamIndex(const CameraDevice *cameraDevice, uint32_t *streamIndex)
 {
@@ -582,7 +577,10 @@ static uint32_t GetStreamBindDeviceId(CameraDevice *cameraDev, uint32_t streamId
 
 static int32_t StartStreamDecoder(CameraDevice *cameraDev, uint32_t bindDeviceId)
 {
-    Param param = {.key = KEY_DEVICE_ID, .val = (void *)&bindDeviceId, .size = sizeof(uint32_t)};
+    Param param = {};
+    param.key = KEY_DEVICE_ID;
+    param.val = (void *)&bindDeviceId;
+    param.size = sizeof(uint32_t);
     int32_t ret = cameraDev->decoder.SetMetadata(&param, 1);
     if (ret != 0) {
         DHLOGE("Set codec source failed.(ret=%d)", ret);
@@ -679,7 +677,10 @@ static int32_t DistributedProcForStreamOff(CameraDevice *cameraDev, uint32_t str
     g_distributedHalMgr.displayLayer->GetLayerDeviceId(0, streamInfo->layerId, &deviceId);
     DHLOGI("GetLayerDeviceId = %u", deviceId);
     deviceId = ((1 << DCAMERA_HAL_SHIFT_24) & 0xff000000) + deviceId;
-    Param param = {.key = KEY_DEVICE_ID, .val = (void *)&deviceId, .size = sizeof(uint32_t)};
+    Param param = {};
+    param.key = KEY_DEVICE_ID;
+    param.val = (void *)&deviceId;
+    param.size = sizeof(uint32_t);
     ret = cameraDev->decoder.SetMetadata(&param, 1);
     if (ret != 0) {
         DHLOGE("unbind codec source failed.(ret=%d)", ret);
@@ -1190,41 +1191,46 @@ void *DistributedHalCameraGetProviderCallback(const char *deviceId, const char *
     return cameraDev->providerCallback;
 }
 
-static HalCameraManager g_distributedHalCameraManager = {
-    .HalCameraInit = DistributedHalCameraInit,
-    .HalCameraDeinit = DistributedHalCameraDeinit,
-    .HalCameraGetModeNum = DistributedHalCameraGetModeNum,
-    .HalCameraSetMode = DistributedHalCameraSetMode,
-    .HalCameraSetDeviceDetectCb = DistributedHalCameraSetDeviceDetectCb,
-    .HalCameraGetDeviceNum = DistributedHalCameraGetDeviceNum,
-    .HalCameraGetDeviceList = DistributedHalCameraGetDeviceList,
-    .HalCameraGetStreamCapNum = DistributedHalCameraGetStreamCapNum,
-    .HalCameraGetStreamCap = DistributedHalCameraGetStreamCap,
-    .HalCameraDeviceOpen = DistributedHalCameraDeviceOpen,
-    .HalCameraDeviceClose = DistributedHalCameraDeviceClose,
-    .HalCameraStreamCreate = DistributedHalCameraStreamCreate,
-    .HalCameraStreamDestroy = DistributedHalCameraStreamDestroy,
-    .HalCameraGetDeviceId = DistributedHalCameraGetDeviceId,
-    .HalCameraStreamOn = DistributedHalCameraStreamOn,
-    .HalCameraStreamOff = DistributedHalCameraStreamOff,
-    .HalCameraDequeueBuf = DistributedHalCameraDequeueBuf,
-    .HalCameraQueueBuf = DistributedHalCameraQueueBuf,
-    .HalCameraSetBufferCallback = DistributedHalCameraSetBufferCallback,
-    .HalCameraStreamSetInfo = DistributedHalCameraStreamSetInfo,
-    .HalCameraStreamGetInfo = DistributedHalCameraStreamGetInfo,
-    .HalCameraDeviceSetInfo = DistributedHalCameraDeviceSetInfo,
-    .HalCameraDeviceGetInfo = DistributedHalCameraDeviceGetInfo,
-    .HalCameraGetAbility = DistributedHalCameraGetAbility,
-    .HalCameraSetResultCb = DistributedHalCameraSetResultCb,
-    .HalCameraUpdateSettings = DistributedHalCameraUpdateSettings,
-    .HalCameraAddCameraDevice = DistributedHalCameraAddCameraDevice,
-    .HalCameraRemoveCameraDevice = DistributedHalCameraRemoveCameraDevice,
-    .HalCameraAcquireBuffer = DistributedHalCameraAcquireBuffer,
-    .HalCameraShutterBuffer = DistributedHalCameraShutterBuffer,
-    .HalCameraOnSettingsResult = DistributedHalCameraOnSettingsResult,
-    .HalCameraNotify = DistributedHalCameraNotify,
-    .HalCameraGetProviderCallback = DistributedHalCameraGetProviderCallback,
-};
+static HalCameraManager MakeHalCameraManager(void)
+{
+    HalCameraManager cameraManager = {};
+    cameraManager.HalCameraInit = DistributedHalCameraInit;
+    cameraManager.HalCameraDeinit = DistributedHalCameraDeinit;
+    cameraManager.HalCameraGetModeNum = DistributedHalCameraGetModeNum;
+    cameraManager.HalCameraSetMode = DistributedHalCameraSetMode;
+    cameraManager.HalCameraSetDeviceDetectCb = DistributedHalCameraSetDeviceDetectCb;
+    cameraManager.HalCameraGetDeviceNum = DistributedHalCameraGetDeviceNum;
+    cameraManager.HalCameraGetDeviceList = DistributedHalCameraGetDeviceList;
+    cameraManager.HalCameraGetStreamCapNum = DistributedHalCameraGetStreamCapNum;
+    cameraManager.HalCameraGetStreamCap = DistributedHalCameraGetStreamCap;
+    cameraManager.HalCameraDeviceOpen = DistributedHalCameraDeviceOpen;
+    cameraManager.HalCameraDeviceClose = DistributedHalCameraDeviceClose;
+    cameraManager.HalCameraStreamCreate = DistributedHalCameraStreamCreate;
+    cameraManager.HalCameraStreamDestroy = DistributedHalCameraStreamDestroy;
+    cameraManager.HalCameraGetDeviceId = DistributedHalCameraGetDeviceId;
+    cameraManager.HalCameraStreamOn = DistributedHalCameraStreamOn;
+    cameraManager.HalCameraStreamOff = DistributedHalCameraStreamOff;
+    cameraManager.HalCameraDequeueBuf = DistributedHalCameraDequeueBuf;
+    cameraManager.HalCameraQueueBuf = DistributedHalCameraQueueBuf;
+    cameraManager.HalCameraSetBufferCallback = DistributedHalCameraSetBufferCallback;
+    cameraManager.HalCameraStreamSetInfo = DistributedHalCameraStreamSetInfo;
+    cameraManager.HalCameraStreamGetInfo = DistributedHalCameraStreamGetInfo;
+    cameraManager.HalCameraDeviceSetInfo = DistributedHalCameraDeviceSetInfo;
+    cameraManager.HalCameraDeviceGetInfo = DistributedHalCameraDeviceGetInfo;
+    cameraManager.HalCameraGetAbility = DistributedHalCameraGetAbility;
+    cameraManager.HalCameraSetResultCb = DistributedHalCameraSetResultCb;
+    cameraManager.HalCameraUpdateSettings = DistributedHalCameraUpdateSettings;
+    cameraManager.HalCameraAddCameraDevice = DistributedHalCameraAddCameraDevice;
+    cameraManager.HalCameraRemoveCameraDevice = DistributedHalCameraRemoveCameraDevice;
+    cameraManager.HalCameraAcquireBuffer = DistributedHalCameraAcquireBuffer;
+    cameraManager.HalCameraShutterBuffer = DistributedHalCameraShutterBuffer;
+    cameraManager.HalCameraOnSettingsResult = DistributedHalCameraOnSettingsResult;
+    cameraManager.HalCameraNotify = DistributedHalCameraNotify;
+    cameraManager.HalCameraGetProviderCallback = DistributedHalCameraGetProviderCallback;
+    return cameraManager;
+}
+
+static HalCameraManager g_distributedHalCameraManager = MakeHalCameraManager();
 
 HalCameraManager *GetHalDistributedCameraFuncs(void)
 {

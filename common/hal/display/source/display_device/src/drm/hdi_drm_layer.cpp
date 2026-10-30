@@ -17,6 +17,7 @@
 #include <cinttypes>
 #include <cerrno>
 #include "drm_device.h"
+#include "display_make_unique.h"
 
 namespace OHOS {
 namespace HDI {
@@ -78,7 +79,7 @@ bool DrmGemBuffer::IsValid() const
 DrmGemBuffer *HdiDrmLayer::GetGemBuffer()
 {
     DISPLAY_LOGD();
-    std::unique_ptr<DrmGemBuffer> ptr = std::make_unique<DrmGemBuffer>(DrmDevice::GetDrmFd(), *GetCurrentBuffer());
+    std::unique_ptr<DrmGemBuffer> ptr = MakeUnique<DrmGemBuffer>(DrmDevice::GetDrmFd(), *GetCurrentBuffer());
     lastBuffer_ = std::move(mCurrentBuffer);
     mCurrentBuffer = std::move(ptr);
     return mCurrentBuffer.get();

@@ -16,6 +16,7 @@
 #include "hdi_display.h"
 #include <vector>
 #include "display_common.h"
+#include "display_make_unique.h"
 
 namespace OHOS {
 namespace HDI {
@@ -110,7 +111,7 @@ int32_t HdiDisplay::CreateLayer(const LayerInfo *layerInfo, uint32_t *layerId)
 std::unique_ptr<HdiLayer> HdiDisplay::CreateHdiLayer(LayerType type)
 {
     DISPLAY_LOGD();
-    return std::make_unique<HdiLayer>(type);
+    return MakeUnique<HdiLayer>(type);
 }
 
 

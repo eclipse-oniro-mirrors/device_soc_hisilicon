@@ -17,6 +17,7 @@
 #include <chrono>
 #include <sys/time.h>
 #include "display_common.h"
+#include "display_make_unique.h"
 
 namespace OHOS {
 namespace HDI {
@@ -25,7 +26,7 @@ SorftVsync::SorftVsync() {}
 
 int32_t SorftVsync::Init()
 {
-    thread_ = std::make_unique<std::thread>([this]() { WorkThread(); });
+    thread_ = MakeUnique<std::thread>([this]() { WorkThread(); });
     DISPLAY_CHK_RETURN((thread_ == nullptr), DISPLAY_FAILURE, DISPLAY_LOGE("can not create thread"));
     running_ = true;
     return DISPLAY_SUCCESS;

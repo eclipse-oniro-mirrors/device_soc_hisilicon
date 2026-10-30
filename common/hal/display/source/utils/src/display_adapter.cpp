@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include "display_make_unique.h"
 namespace OHOS {
 namespace HDI {
 namespace DISPLAY {
@@ -25,7 +26,7 @@ std::unique_ptr<DisplayAdapter> &DisplayAdapter::GetInstance()
     static std::unique_ptr<DisplayAdapter> instance = nullptr;
     static std::once_flag once;
     std::call_once(once, [&]() {
-        auto adapter = std::make_unique<DisplayAdapter>();
+        auto adapter = MakeUnique<DisplayAdapter>();
         if (adapter != nullptr) {
             int ret = adapter->Init();
             if (ret == DISPLAY_SUCCESS) {

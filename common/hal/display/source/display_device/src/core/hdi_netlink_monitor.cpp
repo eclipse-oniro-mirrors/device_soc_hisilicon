@@ -16,6 +16,7 @@
 #include "hdi_netlink_monitor.h"
 #include <sys/socket.h>
 #include <cerrno>
+#include "display_make_unique.h"
 
 namespace OHOS {
 namespace HDI {
@@ -39,7 +40,7 @@ int HdiNetLinkMonitor::Init()
     ret = bind(fd, (struct sockaddr *)&snl, sizeof(struct sockaddr_nl));
     DISPLAY_CHK_RETURN((ret < 0), DISPLAY_FAILURE, DISPLAY_LOGE("bind failed errno : %{public}d", errno));
 
-    mThread = std::make_unique<std::thread>([this]() {
+    mThread = MakeUnique<std::thread>([this]() {
         mRunning = true;
         MonitorThread();
     });

@@ -26,6 +26,7 @@
 #include "vsync/sorft_vsync.h"
 #include "hdi_gfx_composition.h"
 #include "display_adapter.h"
+#include "display_make_unique.h"
 
 namespace OHOS {
 namespace HDI {
@@ -71,18 +72,18 @@ int32_t FbDisplay::Init()
     displayCapability_.phyHeight = varInfo.yres;
     displayCapability_.type = DISP_INTF_PANEL;
     mActiveModeId = 0;
-    auto preComp = std::make_unique<HdiGfxComposition>();
+    auto preComp = MakeUnique<HdiGfxComposition>();
     DISPLAY_CHK_RETURN((preComp == nullptr), DISPLAY_FAILURE,
         DISPLAY_LOGE("can not new HdiGfxComposition errno %{public}d", errno));
     ret = preComp->Init();
     DISPLAY_CHK_RETURN((ret != DISPLAY_SUCCESS), DISPLAY_FAILURE, DISPLAY_LOGE("can not init HdiGfxComposition"));
 
-    auto postComp = std::make_unique<FbComposition>(deviceFds_);
+    auto postComp = MakeUnique<FbComposition>(deviceFds_);
     DISPLAY_CHK_RETURN((postComp == nullptr), DISPLAY_FAILURE,
         DISPLAY_LOGE("can not new HdiDrmComposition errno %{public}d", errno));
     ret = postComp->Init();
     DISPLAY_CHK_RETURN((ret != DISPLAY_SUCCESS), DISPLAY_FAILURE, DISPLAY_LOGE("can not init HdiDrmComposition"));
-    mComposer = std::make_unique<HdiComposer>(std::move(preComp), std::move(postComp));
+    mComposer = MakeUnique<HdiComposer>(std::move(preComp), std::move(postComp));
     mClientLayer->SetReleaseFence(-1);
     return DISPLAY_SUCCESS;
 }
