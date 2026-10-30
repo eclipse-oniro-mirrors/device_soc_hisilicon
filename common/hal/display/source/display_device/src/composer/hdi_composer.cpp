@@ -15,6 +15,7 @@
 
 #include "hdi_composer.h"
 #include "hdi_video_composition.h"
+#include "display_make_unique.h"
 
 namespace OHOS {
 namespace HDI {
@@ -23,7 +24,7 @@ HdiComposer::HdiComposer(std::unique_ptr<HdiComposition> pre, std::unique_ptr<Hd
 {
     preComp_.emplace_back(std::move(pre));
     postComp_.emplace_back(std::move(post));
-    auto videoComp = std::make_unique<HdiVideoComposition>();
+    auto videoComp = MakeUnique<HdiVideoComposition>();
     if (videoComp != nullptr) {
         if (videoComp->Init() == DISPLAY_SUCCESS) {
             AddPostComp(std::move(videoComp));

@@ -16,6 +16,7 @@
 #include "hdi_layer.h"
 #include <unistd.h>
 #include <cerrno>
+#include "display_make_unique.h"
 
 namespace OHOS {
 namespace HDI {
@@ -151,7 +152,7 @@ int32_t HdiLayer::SetLayerBuffer(const BufferHandle *buffer, int32_t fence)
 {
     DISPLAY_LOGD();
     DISPLAY_CHK_RETURN((buffer == nullptr), DISPLAY_NULL_PTR, DISPLAY_LOGE("buffer is nullptr"));
-    std::unique_ptr<HdiLayerBuffer> layerbuffer = std::make_unique<HdiLayerBuffer>(*buffer);
+    std::unique_ptr<HdiLayerBuffer> layerbuffer = MakeUnique<HdiLayerBuffer>(*buffer);
     mHdiBuffer = std::move(layerbuffer);
     if (fence > -1) {
         mAcquireFence = dup(fence);

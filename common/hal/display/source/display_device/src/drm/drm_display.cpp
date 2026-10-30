@@ -25,6 +25,7 @@
 #include "drm_vsync_worker.h"
 #include "hdi_drm_composition.h"
 #include "hdi_gfx_composition.h"
+#include "display_make_unique.h"
 
 namespace OHOS {
 namespace HDI {
@@ -50,18 +51,18 @@ int32_t DrmDisplay::Init()
 
     ret = HdiDisplay::Init();
     DISPLAY_CHK_RETURN((ret != DISPLAY_SUCCESS), DISPLAY_FAILURE, DISPLAY_LOGE("init failed"));
-    auto preComp = std::make_unique<HdiGfxComposition>();
+    auto preComp = MakeUnique<HdiGfxComposition>();
     DISPLAY_CHK_RETURN((preComp == nullptr), DISPLAY_FAILURE,
         DISPLAY_LOGE("can not new HdiGfxComposition errno %{public}d", errno));
     ret = preComp->Init();
     DISPLAY_CHK_RETURN((ret != DISPLAY_SUCCESS), DISPLAY_FAILURE, DISPLAY_LOGE("can not init HdiGfxComposition"));
 
-    auto postComp = std::make_unique<HdiDrmComposition>(mConnector, mCrtc, mDrmDevice);
+    auto postComp = MakeUnique<HdiDrmComposition>(mConnector, mCrtc, mDrmDevice);
     DISPLAY_CHK_RETURN((postComp == nullptr), DISPLAY_FAILURE,
         DISPLAY_LOGE("can not new HdiDrmComposition errno %{public}d", errno));
     ret = postComp->Init();
     DISPLAY_CHK_RETURN((ret != DISPLAY_SUCCESS), DISPLAY_FAILURE, DISPLAY_LOGE("can not init HdiDrmComposition"));
-    mComposer = std::make_unique<HdiComposer>(std::move(preComp), std::move(postComp));
+    mComposer = MakeUnique<HdiComposer>(std::move(preComp), std::move(postComp));
     ret = mCrtc->BindToDisplay(GetId());
     DISPLAY_CHK_RETURN((ret != DISPLAY_SUCCESS), DISPLAY_FAILURE, DISPLAY_LOGE("bind crtc failed"));
 
@@ -162,7 +163,7 @@ int32_t DrmDisplay::ConvertToDrmPowerState(DispPowerStatus hdiPowerState, uint32
 std::unique_ptr<HdiLayer> DrmDisplay::CreateHdiLayer(LayerType type)
 {
     DISPLAY_LOGD();
-    return std::make_unique<HdiDrmLayer>(type);
+    return MakeUnique<HdiDrmLayer>(type);
 }
 
 int32_t DrmDisplay::WaitForVBlank(uint64_t *ns)
@@ -197,12 +198,11 @@ int32_t DrmDisplay::PushFirstFrame()
     ret = mConnector->GetModeFromId(mCrtc->GetActiveModeId(), mode);
     DISPLAY_CHK_RETURN((ret != DISPLAY_SUCCESS), DISPLAY_FAILURE,
         DISPLAY_LOGE("can not get the mode from id %{public}d", mCrtc->GetActiveModeId()));
-    AllocInfo info = {
-        .width = mode.GetModeInfoPtr()->hdisplay,
-        .height = mode.GetModeInfoPtr()->vdisplay,
-        .usage = HBM_USE_MEM_DMA | HBM_USE_CPU_READ | HBM_USE_CPU_WRITE,
-        .format = PIXEL_FMT_BGRA_8888
-    };
+    AllocInfo info = {};
+    info.width = mode.GetModeInfoPtr()->hdisplay;
+    info.height = mode.GetModeInfoPtr()->vdisplay;
+    info.usage = HBM_USE_MEM_DMA | HBM_USE_CPU_READ | HBM_USE_CPU_WRITE;
+    info.format = PIXEL_FMT_BGRA_8888;
 
     BufferHandle *buffer = nullptr;
     ret = grallocFucs->AllocMem(&info, &buffer);

@@ -17,6 +17,7 @@
 #include <chrono>
 #include "display_common.h"
 #include "drm_device.h"
+#include "display_make_unique.h"
 
 namespace OHOS {
 namespace HDI {
@@ -28,7 +29,7 @@ int32_t DrmVsyncWorker::Init(int fd)
     DISPLAY_CHK_RETURN((fd < 0), DISPLAY_FAILURE, DISPLAY_LOGE("the fd is invalid"));
     mDrmFd = fd;
     DISPLAY_LOGD("the drm fd is %{public}d", fd);
-    mThread = std::make_unique<std::thread>([this]() { WorkThread(); });
+    mThread = MakeUnique<std::thread>([this]() { WorkThread(); });
     DISPLAY_CHK_RETURN((mThread == nullptr), DISPLAY_FAILURE, DISPLAY_LOGE("can not create thread"));
     mRunning = true;
     return DISPLAY_SUCCESS;
@@ -74,14 +75,10 @@ uint64_t DrmVsyncWorker::WaitNextVBlank(unsigned int &sq)
 {
     constexpr uint64_t SEC_TO_NSEC = 1000 * 1000 * 1000;
     constexpr uint64_t USEC_TO_NSEC = 1000;
-    drmVBlank vblank = {
-        .request =
-            drmVBlankReq {
-                .type = DRM_VBLANK_RELATIVE,
-                .sequence = 1,
-                .signal = 0,
-            }
-    };
+    drmVBlank vblank = {};
+    vblank.request.type = DRM_VBLANK_RELATIVE;
+    vblank.request.sequence = 1;
+    vblank.request.signal = 0;
     int ret = drmWaitVBlank(mDrmFd, &vblank);
     DISPLAY_CHK_RETURN((ret < 0), 0,
         DISPLAY_LOGE("wait vblank failed ret :　%{public}d　errno %{public}d", ret, errno));

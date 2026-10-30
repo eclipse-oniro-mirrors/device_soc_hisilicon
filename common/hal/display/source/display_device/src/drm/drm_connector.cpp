@@ -17,6 +17,7 @@
 #include <cinttypes>
 #include <securec.h>
 #include "drm_device.h"
+#include "display_make_unique.h"
 
 namespace OHOS {
 namespace HDI {
@@ -270,7 +271,7 @@ std::unique_ptr<DrmModeBlock> DrmConnector::GetModeBlockFromId(int32_t id)
     DISPLAY_LOGD("id %{public}d", id);
     auto iter = mModes.find(id);
     DISPLAY_CHK_RETURN((iter == mModes.end()), nullptr, DISPLAY_LOGE("can not the mode %{public}d", id));
-    return std::make_unique<DrmModeBlock>(mModes[id]);
+    return MakeUnique<DrmModeBlock>(mModes[id]);
 }
 
 DrmModeBlock::DrmModeBlock(DrmMode &mode)
