@@ -1,21 +1,24 @@
 # Hi3403V100
 
 - [简介](#简介)
-- [目录](#目录)
-- [文档](#文档)
+- [目录结构](#目录结构)
+- [基础能力](#基础能力)
+- [高阶功能](#高阶功能)
+- [典型产品](#典型产品)
+- [外设开发](#外设开发)
 - [约束](#约束)
 - [许可协议](#许可协议)
 - [相关仓](#相关仓)
 
 ## 简介
 
-Hi3403V100 是上海海思推出的高性能智能视觉芯片，本目录提供其底层驱动及 SDK，为 OpenHarmony 媒体/图形子系统提供完整的多媒体处理能力。主要功能包括：音视频采集与编解码、音视频输出、视频前处理、封装与解封装、文件管理、存储管理、日志系统等。配套开发板为 **HiSpark Aifly**，系统类型为小型系统（Small System）。
+Hi3403V100 是上海海思推出的高性能智能视觉芯片。本目录为 HiSpark AiFly 开发板提供芯片侧软件，向下封装芯片驱动与海思预编译二进制，向上为 OpenHarmony 的图形、媒体、AI、安全子系统提供南向实现，覆盖音视频采集与编解码、视频前处理、封装解封装、存储管理与日志等能力。系统类型为小型系统（Small System）。
 
 ### 主控芯片介绍
 
-Hi3403V100 是一颗面向监控市场推出的专业 Ultra-HD Smart IP Camera SoC。该芯片最高支持四路 Sensor 输入，支持最高 4K60 的 ISP 图像处理能力，支持 3F WDR、多级降噪、六轴防抖、硬件拼接等多种图像增强和处理算法。Hi3403V100 内置四核 ARM Cortex-A55@1.4GHz 处理器，提供高效且灵活的 CPU 资源；集成单核 MCU，以满足低延时要求较高的场景。芯片集成了高效的神经网络推理单元，最高 10TOPS INT8 算力，支持业界主流神经网络框架；内置双核 Vision DSP，以满足差异化的 CV 计算需求。Hi3403V100 采用先进低功耗工艺和封装，支持 LPDDR4/LPDDR4x/DDR4 颗粒，满足产品小型化设计和快速量产需求。
+Hi3403V100 是一颗面向视觉领域推出的专业 Ultra-HD Smart IP Camera SoC。该芯片最高支持四路 Sensor 输入，支持最高 4K60 的 ISP 图像处理能力，支持 3F WDR、多级降噪、六轴防抖、硬件拼接等多种图像增强和处理算法。Hi3403V100 内置四核 ARM Cortex-A55@1.4GHz 处理器，提供高效且灵活的 CPU 资源；内置 32bit MCU，以满足低延时要求较高的场景。芯片集成了高效的神经网络推理单元，最高 10.4TOPS INT8 算力，支持业界主流神经网络框架；内置双核 Vision DSP，以满足差异化的 CV 计算需求。Hi3403V100 采用先进低功耗工艺和封装，支持 LPDDR4/LPDDR4x/DDR4 颗粒，满足产品小型化设计和快速量产需求。
 
-#### 核心特性
+### 核心特性
 
 | 特性类别 | 核心能力 |
 | --- | --- |
@@ -27,97 +30,87 @@ Hi3403V100 是一颗面向监控市场推出的专业 Ultra-HD Smart IP Camera S
 | 视频输出 | 支持 HDMI2.0、4-Lane MIPI DSI/CSI、CVBS 等多种输出接口，最大输出能力 4096×2160@60fps + 1920×1080@60fps |
 | 外部存储 | 支持 DDR4/LPDDR4/LPDDR4x（最高速率 3733Mbps，最大容量 8GB），支持 SPI Nor/SPI Nand Flash、NAND Flash、eMMC5.1 |
 | 外围接口 | 2 个千兆以太网、2 个 USB3.0/USB2.0、2-Lane PCIe2.0、2 个 SDIO3.0、多个 UART/I²C/SPI/GPIO 接口 |
+| 安全能力 | OTP 一次性可编程存储（安全启动根公钥哈希、多组对称根密钥、SoC 特性开关、约 25Kbit 用户区，支持版本防回滚）；基于 OTP 根密钥的三级密钥派生与加扰保护；SPACC 密码加速引擎、RSA 与硬件真随机数；基于硬件可信根的安全启动与 TrustZone 可信执行环境；经 `hal_huks` 对接 OpenHarmony HUKS |
 
-### 软件架构介绍
-
-**图 1** HiSpark_AiFly small系统软件架构图
-
-![图1 HiSpark_AiFly small系统软件架构图](./doc/figures/HiSpark_AiFly_small系统软件架构图.png)
-
-#### 应用层
-基于框架层提供的能力，适配典型应用场景：
-- **系统应用**：Launcher（简易桌面）、Settings（设置）
-- **媒体应用**：Camera（相机）、Media（媒体播放器）、Gallery（图库）
-- **示例应用**：Recorder（录音机）、MPP Sample（媒体处理示例程序）
-
-#### 框架层
-补齐 OpenHarmony 小型系统组件能力，适配图形与媒体子系统：
-- **新增组件**：HDC（设备连接）、DHCP（动态主机配置）、MindSpore Lite（轻量级 AI 推理）
-- **图形子系统**：适配 arkui、graphic、window 组件
-- **媒体子系统**：适配 camera_lite、media_lite、audio_lite 组件
-- **系统服务**：启动服务、编译配置、XTS适配
-
-#### HAL层
-采用海思芯片硬件特性增强 OpenHarmony 组件能力，提供平台级 HAL 接口：
-- **hal_huks**：硬件密钥加解密模块，增强 HUKS 安全组件功能
-- **hal_display**：显示适配实现，支持 FrameBuffer 和 DRM 显示框架
-- **hal_media**：媒体适配（audio、camera、codec 等），提供音视频处理能力
-
-#### 内核层
-升级 Linux-6.6 内核，移植 DRM 显示框架驱动源码，适配 Hi3403V100 SDK 的驱动模块，包括：
-- **显示驱动**：TDE（二维图形加速）、MIPI TX（显示接口）、HDMI 高清输出
-- **采集驱动**：MIPI RX（摄像头接口），集成 HY_S0603（4K分辨率）和 OS08A20（800万像素）Sensor 驱动
-- **智能驱动**：SVP NPU（Smart Vision Processing NPU）
-- **系统驱动**：OSAL 系统适配层、sysconfig、ot_irq、ot_proc 等
-
-## 目录
+## 目录结构
 
 ```bash
-├── doc                        # 文档目录，含各模块开发参考、API参考、开发指南等
-├── sdk_linux
-│   └── smp
-│       └── a55_linux
-│           ├── interdrv        # 外设驱动（mipi_rx、mipi_tx、sysconfig 等）
-│           ├── mpp             # 媒体处理平台（component、sample、tools）
-│           ├── osal            # 系统适配层，屏蔽系统差异，提供统一接口
-│           └── vendor          # 板级外设（es8388 音频、motionsensor）
-└── uboot                       # U-Boot 引导二进制
+├── docs/zh-CN                  # 专题文档
+├── hdf_driver                  # HDF 驱动适配（display、mipi_dsi）
+├── sdk_linux                   # 芯片 SDK
+│   ├── BUILD.gn                # 编译入口 GN 文件
+│   ├── build.sh                # SDK 编译入口（编译 ko、ATF 等）
+│   ├── open_source             # 开源组件（linux、u-boot、trusted-firmware-a、mbedtls）
+│   ├── osdrv                   # 驱动组件与工具
+│   └── smp/a55_linux
+│       ├── interdrv            # 芯片驱动接口（mipi_rx、mipi_tx、sysconfig 等）
+│       ├── mpp                 # MPP 媒体处理平台（cbb、component、sample 等）
+│       └── osal                # 系统适配层
+└── uboot                       # U-Boot / ATF 固件
 ```
 
-## 文档
+## 基础能力
 
-详细文档索引和快速导航请参见 [doc/README_zh.md](./doc/README_zh.md)。
+- [软件架构说明](./docs/zh-CN/software-architecture.md)
+- [基础能力依赖说明](./docs/zh-CN/precompiled-binaries.md)
+
+## 高阶功能
+
+- [高阶功能说明](./docs/zh-CN/advanced-features.md)
+
+## 典型产品
+
+- [开发板使用教程](https://gitcode.com/openharmony-sig/device_board_hisilicon_hispark_aifly/blob/master/hispark_aifly/README_zh.md)
+- [IP摄像机](./docs/zh-CN/ipc-product.md)
+
+## 外设开发
+
+- [外设适配实操指南](./docs/zh-CN/porting-smallchip-peripheral.md)
 
 ## 约束
 
-当前支持Hi3403V100芯片。
+- 当前版本仅支持 Hi3403V100 芯片，系统类型为小型系统（linux-6.6 + musl）。
 
 ## 许可协议
 
-本项目包含多种许可证，各模块遵循对应的许可协议：
+本项目包含多种许可证，各模块遵循对应的许可协议。
 
 ### Apache License 2.0
 
-- **SDK 自研代码**：Hi3403V100 自研代码使用 Apache License Version 2.0 许可，版权声明如下：
+- **自研代码**：Hi3403V100 自研代码使用 Apache License Version 2.0，版权声明：
 
   ```
   Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
   ```
 
-- **mbedtls**：开源加密库，采用 Apache License 2.0 许可
-
 ### GNU General Public License v2 (GPL-2.0)
 
-以下开源组件采用 GPL-2.0 许可：
+以下开源组件采用 GPL-2.0，各组件许可声明的出处见括号内说明：
 
-- **Linux 内核**：Linux-6.6 内核源码
-- **U-Boot**：引导加载程序
-- **MPP 媒体处理平台**：component、sample、cbb 等模块
-- **OSAL 系统适配层**：系统抽象层实现
-- **interdrv 外设驱动**：MIPI RX/TX、sysconfig 等驱动模块
+- **Linux 内核**（Linux-6.6）：内核源码取自 OpenHarmony 社区仓 kernel_linux，许可遵循社区仓声明
+- **U-Boot**：随 `uboot/` 以二进制形式分发，开源软件声明见本仓 `NOTICE` 中 "Das U-Boot 2020.01" 条目
+- **MPP 媒体处理平台**（component、sample、cbb 等）：`sdk_linux/smp/a55_linux/mpp/` 下各模块的 `LICENSE`
+- **OSAL 系统适配层**：`sdk_linux/smp/a55_linux/osal/LICENSE`
+- **interdrv 外设驱动**（MIPI RX/TX、sysconfig 等）：`sdk_linux/smp/a55_linux/interdrv/LICENSE`
 
 ### BSD 3-Clause License
 
-- **Trusted Firmware-A (TF-A)**：ARM 安全固件，采用 BSD 3-Clause 许可
+- **Trusted Firmware-A (TF-A)**：ARM 安全固件（源码位于 `sdk_linux/open_source/trusted-firmware-a/`，编译产物 fip.bin 随 `uboot/` 分发），采用 BSD 3-Clause。
 
-### 许可协议兼容性说明
+### 兼容性说明
 
-- Hi3403V100 包含其它开源软件组件，各组件遵循其各自的开源许可声明
-- 若开源软件组件许可与本项目许可冲突，以该组件许可为准
-- 使用本项目代码时，请遵守相应许可证的要求和限制
+- 本目录包含其它开源软件组件，各组件遵循其各自的开源许可声明；
+- 若开源组件许可与本项目许可冲突，以该组件许可为准；
+- 使用本项目代码时，请遵守相应许可证的要求和限制。
 
 ## 相关仓
 
-[vendor_hisilicon](https://gitee.com/openharmony/vendor_hisilicon)
+- [device_soc_hisilicon](https://gitcode.com/openharmony/device_soc_hisilicon)（本仓）
+- [device_board_hisilicon](https://gitcode.com/openharmony/device_board_hisilicon)
+- [vendor_hisilicon](https://gitcode.com/openharmony/vendor_hisilicon)
 
-[device_board_hisilicon](https://gitee.com/openharmony/device_board_hisilicon)
+HiSpark AiFly 解决方案 SIG 仓：
+
+- [device_soc_hisilicon_hispark_aifly](https://gitcode.com/openharmony-sig/device_soc_hisilicon_hispark_aifly)
+- [device_board_hisilicon_hispark_aifly](https://gitcode.com/openharmony-sig/device_board_hisilicon_hispark_aifly)
+- [vendor_hisilicon_hispark_aifly](https://gitcode.com/openharmony-sig/vendor_hisilicon_hispark_aifly)
