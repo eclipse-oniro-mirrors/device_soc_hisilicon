@@ -13,7 +13,7 @@ U-Boot（Universal Boot Loader）是一款开源、跨平台、功能强大的�
 
 Hi3403V100采用ARMv8-A 64位架构，与Hi3516DV300的ARMv8-A 32位架构存在差异。ARMv8-A 64位架构编译需启用安全编译配置，集成Trusted Firmware-A(ATF)引导加载程序，依赖ATF开源项目。
 由于该开源项目未集成至HarmonyOS中，修改方案如下：
-1. 将ATF项目集成至device_soc_hisilicon_hispark_aifly仓库的hi3403v100/uboot/目录下，增加包含ATF的fip.bin文件。 
+1. 将ATF项目集成至device_soc_hisilicon_hispark_aifly仓库的hi3403v100/bootloader/目录下，增加包含ATF的fip.bin文件。
 2. fip.bin与uImage划分独立分区进行烧写。
 3. 为了适配fip.bin与uImage划分独立分区进行烧写，需要修改bootargs、emmc_burn_table.xml、uboot_env_4GB.bin及boot_image_4GB.bin文件。
 

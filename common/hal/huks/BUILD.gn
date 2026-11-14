@@ -38,26 +38,22 @@ if (defined(ohos_lite)) {
     ]
 
     if (board_name == "hispark_aifly" || board_name == "hispark_aiflylite") {
-        sdk_lib_path = rebase_path("${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/lib")
+        sdk_lib_path = rebase_path("${root_out_dir}/sdk_linux/src_tmp/hardware/lib")
+        print("[SDK-PATH][GN] huks: root_out_dir = " + root_out_dir)
+        print("[SDK-PATH][GN] huks: sdk_lib_path = " + sdk_lib_path)
         include_dirs += [
-          "${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/include",
+          "${root_out_dir}/sdk_linux/src_tmp/hardware/include",
+          "${root_out_dir}/sdk_linux/src_tmp/config/clang",
           "hi3403v100/include",
         ]
 
         sources += [ "hi3403v100/src/huks_hdi_cipher_adapter.c" ]
 
-        deps += [ "//device/soc/hisilicon/hi3403v100/sdk_linux:hispark_aifly_sdk" ]
+        deps += [ "//device/soc/hisilicon/hi3403v100:hispark_aifly_sdk" ]
         ldflags = [
             "-L${sdk_lib_path}",
-            "-lss_cipher",
-            "-lss_klad",
-            "-lss_otp",
-            "-lss_voice_engine",
-            "-lss_upvqe",
-            "-lss_dnvqe",
-            "-lss_mpi",
-            "-lot_osal",
-            "-lot_irq",
+            "-lmpp_sec",
+            "-lmpp_media",
             ]
     }
   }

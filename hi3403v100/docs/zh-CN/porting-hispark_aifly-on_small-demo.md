@@ -2,6 +2,8 @@
 
 ## 前言<a name="ZH-CN_TOPIC_0000002434316444"></a>
 
+> **目录结构说明**：本文写于仓库目录重构之前。文中的旧版 `sdk_linux/` 相关路径在重构后位于 `device/soc/hisilicon/hi3403v100/`：`sdk_linux/build.sh` → `build.sh`，`sdk_linux/BUILD.gn` → `BUILD.gn`，`sdk_linux/hardware` → `hardware`；`sdk_linux/smp/a55_linux/mpp/sample` 下的 Sensor 驱动已迁至 `hardware/sensor/`，MPP 样例（audio/hdmi）已从本仓移除。移植流程与设计不受影响。
+
 **概述<a name="section4537382116410"></a>**
 
 本文章是基于视觉Hi3403V100芯片配套的hispark_aifly开发板，进行OpenHarmony小型系统相关功能的移植；主要包括解决方案集成，产品配置添加，内核移植适配、编译，XTS认证，HUKS组件增强特性，图形增强特性，媒体增强特性的适配案例总结。
@@ -188,7 +190,7 @@ device/soc/hisilicon
 
 配置OpenHarmony环境上编译芯片SDK的相关参数。
 
-修改文件device/soc/hisilicon/hi3403v100/sdk_linux/BUILD.gn，配置芯片SDK编译的相关参数。
+修改文件device/soc/hisilicon/hi3403v100/BUILD.gn，配置芯片SDK编译的相关参数。
 
 -   ohos_root_path：OpenHarmony源码根目录；
 -   outdir：OpenHarmony源码编译out目录；
@@ -241,7 +243,7 @@ command -v clang
 
 ### OpenHarmony环境上编译ko和atf<a name="ZH-CN_TOPIC_0000002524275086"></a>
 
-修改device/soc/hisilicon/hi3403v100/sdk_linux/build.sh
+修改device/soc/hisilicon/hi3403v100/build.sh
 
 ```
 set -e
@@ -265,7 +267,7 @@ if [ ${COMPILER_DIR} != "" ];then
     export COMPILER_PATH=${COMPILER_DIR}/bin
 fi
 
-SDK_LINUX_SRC_PATH=${OHOS_ROOT_PATH}/device/soc/hisilicon/hi3403v100/sdk_linux
+CHIP_PATH=${OHOS_ROOT_PATH}/device/soc/hisilicon/hi3403v100
 BATCH_SIGN_KO_SCRIPT=${OHOS_ROOT_PATH}/device/board/hisilicon/hispark_aifly/kernel/batch_sign_ko.sh
 SDK_LINUX_TMP_PATH=${OHOS_OUTDIR}/sdk_linux/src_tmp
 SDK_LINUX_SMP_PATH=${SDK_LINUX_TMP_PATH}/smp
@@ -325,7 +327,7 @@ cp -rf ${SDK_LINUX_OPEN_PATH}/trusted-firmware-a/arm-trusted-firmware-2.2/build/
 
 ### 往rootfs中打包SDK用户态库<a name="ZH-CN_TOPIC_0000002449398202"></a>
 
-修改文件device/soc/hisilicon/hi3403v100/sdk_linux/BUILD.gn，将芯片SDK提供的用户态lib库文件拷贝进outdir中，从而被打包进rootfs中。
+修改文件device/soc/hisilicon/hi3403v100/BUILD.gn，将芯片SDK提供的用户态lib库文件拷贝进outdir中，从而被打包进rootfs中。
 
 sdk_libs_name_set：为在OpenHarmony环境上运行MPP Sample所依赖的用户态lib库文件列表。
 
@@ -1119,9 +1121,9 @@ if (board_name == "hispark_aifly" || board_name == "hispark_aiflylite") {
 
       if (ohos_kernel_type == "linux") {
       include_dirs += [
-        "//device/soc/hisilicon/hi3403v100/sdk_linux/smp/a55_linux/mpp/out/include"
+        "${root_out_dir}/sdk_linux/src_tmp/hardware/include"
       ]
-      deps += ["//device/soc/hisilicon/hi3403v100/sdk_linux:hispark_aifly_sdk"]
+      deps += ["//device/soc/hisilicon/hi3403v100:hispark_aifly_sdk"]
       }
 
       defines += [ "ENABLE_H8" ]
@@ -1174,9 +1176,9 @@ if (board_name == "hispark_aifly" || board_name == "hispark_aiflylite") {
       ]
 
       include_dirs += [
-        "//device/soc/hisilicon/hi3403v100/sdk_linux/smp/a55_linux/mpp/out/include"
+        "${root_out_dir}/sdk_linux/src_tmp/hardware/include"
       ]
-      deps += ["//device/soc/hisilicon/hi3403v100/sdk_linux:hispark_aifly_sdk"]
+      deps += ["//device/soc/hisilicon/hi3403v100:hispark_aifly_sdk"]
 
       defines += [ "ENABLE_H8" ]
       ldflags = [ "-lss_tde" ]
@@ -1212,9 +1214,9 @@ if (board_name == "hispark_aifly" || board_name == "hispark_aiflylite") {
       ]
 
       include_dirs += [
-        "//device/soc/hisilicon/hi3403v100/sdk_linux/smp/a55_linux/mpp/out/include"
+        "${root_out_dir}/sdk_linux/src_tmp/hardware/include"
       ]
-      deps += ["//device/soc/hisilicon/hi3403v100/sdk_linux:hispark_aifly_sdk"]
+      deps += ["//device/soc/hisilicon/hi3403v100:hispark_aifly_sdk"]
 
       defines += [ "ENABLE_H8" ]
       ldflags = [

@@ -42,7 +42,7 @@ SRC_DEPS_INC_PATH += -I$(RECORDER_INCLUDE)\
                      -I$(TS_INC_DIR) \
                      -I$(FILEFORMAT_INC_DIR) \
                      -I$(MIDDLEWARE_COMMON_INC_DIR) \
-                     -I$(MPP_INC_PATH) \
+                     -I$(MPP_INC_PATH) -I$(MPP_CFG_INC_PATH) \
                      -I$(LOCAL_DIR)/../../include \
                      -I$(FORMAT_INTERFACE_PATH) \
                      -I$(DTCF_MANAGER_PATH)

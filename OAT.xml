@@ -67,7 +67,7 @@ Note:If the text contains special characters, please escape them according to th
 				<policyitem type="license" name="MulanPSL-2.0" path="ws63v100/sdk/kernel/liteos/liteos_v208.5.0/Huawei_LiteOS/platform/libsec/include/.*" desc="libboundscheck"/>
 				<policyitem type="license" name="MulanPSL-2.0" path="ws63v100/sdk/drivers/chips/ws63/rom/open_source/libboundscheck/.*" desc="libboundscheck"/>
 				<policyitem type="license" name="MulanPSL-2.0" path="ws63v100/sdk/drivers/chips/ws63/rom/rom_boot/open_source/libboundscheck/.*" desc="libboundscheck"/>
-				<policyitem type="license" name="MulanPSL-2.0" path="hi3403v100/sdk_linux/smp/a55_linux/mpp/component/securec/*" desc="LICENSE for securec"/>
+				<policyitem type="license" name="MulanPSL-2.0" path="hi3403v100/hardware/mpp/component/securec/*" desc="LICENSE for securec"/>
 				<policyitem type="copyright" name="HiSilicon (Shanghai) Technologies Co., Ltd." path=".*" desc="HiSilicon copyright"/>
 				<policyitem type="copyright" name="HiSilicon (Shanghai) Technologies CO., LIMITED." path=".*" desc="HiSilicon copyright"/>
 				<policyitem type="copyright" name="Free Software Foundation, Inc." path=".*" desc="copyright"/>

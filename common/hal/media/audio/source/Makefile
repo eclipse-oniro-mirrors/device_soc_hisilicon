@@ -13,7 +13,7 @@ SRC_DEPS_INC_PATH += -I$(MEDIA_HAL_COMMN_INC_PATH) \
 					 -I$(LOCAL_DIR)/src/audio_plugins_manager/include \
 					 -I$(LOCAL_DIR)/plugins/plugin_include \
 					 -I$(LOCAL_DIR)/plugins/hi35xx/audio_primary_port_plugin \
-					 -I$(SECUREC_INC_PATH)
+					 -I$(SECUREC_INC_PATH) -I$(MPP_CFG_INC_PATH)
 
 
 SRC_ROOT    := $(LOCAL_DIR)

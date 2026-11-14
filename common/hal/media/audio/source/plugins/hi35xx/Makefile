@@ -18,7 +18,7 @@ MW_COMMON_INC_PATH := $(MEDIA_BASE_DIR)/../middleware/source/common/include/
 
 SRC_DEPS_INC_PATH := -I$(AUDIO_HAL_INC_PATH)
 SRC_DEPS_INC_PATH += -I$(AUDIO_DRIVERS_INC_PATH)\
-                     -I$(MPP_INC_PATH)\
+                     -I$(MPP_INC_PATH) -I$(MPP_CFG_INC_PATH)\
                      -I$(AUDIO_PORT_PLUGIN_COM_INC_PATH)\
                      -I$(MEDIA_HAL_COMMN_INC_PATH) \
                      -I$(AUDIO_INTERFACE_PATH) \
@@ -28,7 +28,7 @@ SRC_DEPS_INC_PATH += -I$(AUDIO_DRIVERS_INC_PATH)\
                      -I$(AUDIO_EFFECT_MANAGER_INC_PATH) \
                      -I$(OTCONFACCESS_INC_PATH) \
                      -I$(MW_COMMON_INC_PATH) \
-                     -I$(SECUREC_INC_PATH)
+                     -I$(SECUREC_INC_PATH) -I$(MPP_CFG_INC_PATH)
 
 #mod dir
 MOD_ROOT    := $(LOCAL_DIR)/../..
@@ -54,7 +54,7 @@ LDFLAGS_SO := $(LDFLAGS)
 
 ifeq ($(filter $(CFG_CHIP_TYPE),hi3403v100),$(CFG_CHIP_TYPE))
 CFLAGS_CUR += -D__SS626V100__ -D__LINUX__
-SRC_DEPS_LIB +=	-lmedia_hal_common -lss_mpi -lsecurec -lpthread -ldl -lm -lmwlog -lotconfaccess  -laac_sbr_enc -laac_sbr_dec -lvqe_record -lvqe_res -lss_otp
+SRC_DEPS_LIB +=	-lmedia_hal_common -lsecurec -lpthread -ldl -lm -lmwlog -lotconfaccess -lmpp_media
 else
 SRC_DEPS_LIB += -lmedia_hal_common -lss_mpi_audio -lsecurec -lpthread -ldl -lm -lmwlog -lotconfaccess -lss_mpi_audio_adp -lopus -laac_sbr_enc -laac_sbr_dec -lmp3_dec -lmp3_enc -lvqe_record -lvqe_res
 endif
@@ -63,8 +63,8 @@ SRC_DEPS_LIB_PATH += -L$(MPP_LIB_PATH)\
                      -L$(MEDIA_HAL_COMMN_LIB_PATH) 
 
 ifeq ($(filter $(CFG_CHIP_TYPE),hi3403v100),$(CFG_CHIP_TYPE))
-SRC_DEPS_LIB_PATH += -L$(MEDIA_BASE_DIR)/../middleware/source/component/otconfaccess/lib/ss928v100/clang_musl \
-                     -L$(MEDIA_BASE_DIR)/../middleware/source/common/log/lib/ss928v100/clang_musl
+SRC_DEPS_LIB_PATH += -L$(MEDIA_BASE_DIR)/../middleware/source/component/otconfaccess/lib/hi3403v100/clang_musl \
+                     -L$(MEDIA_BASE_DIR)/../middleware/source/common/log/lib/hi3403v100/clang_musl
 else
 SRC_DEPS_LIB_PATH += -L$(MEDIA_BASE_DIR)/../middleware/source/component/otconfaccess/lib/hi3516dv500/gcc_musl \
                      -L$(MEDIA_BASE_DIR)/../middleware/source/common/log/lib/hi3516dv500/gcc_musl

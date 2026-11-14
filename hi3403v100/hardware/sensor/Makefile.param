@@ -1,0 +1,167 @@
+# 本文件由原 sample/mpp/Makefile.param 迁移而来，随 Sensor 库一起编译，路径已按新位置调整。
+
+ifeq ($(PARAM_FILE), )
+     # 路径相对执行 make 的目录（hardware/sensor/<sensor>）
+     PARAM_FILE := ../../mpp/Makefile.param
+     include $(PARAM_FILE)
+endif
+
+################# select sensor type for your sample ###############################
+####    HY_S0603_MIPI_8M_30FPS_12BIT               #################
+####    HY_S0603_MIPI_8M_30FPS_10BIT_WDR2TO1       #################
+####    OV_OS08A20_MIPI_8M_30FPS_12BIT             #################
+####    OV_OS08A20_MIPI_8M_30FPS_12BIT_WDR2TO1     #################
+####    SC450AI_MIPI_4M_30FPS_10BIT                #################
+####    SC450AI_MIPI_4M_30FPS_10BIT_WDR2TO1        #################
+
+## change sensor type here. default: hy_s0603
+
+SENSOR0_TYPE ?= OV_OS08A20_MIPI_8M_30FPS_12BIT
+SENSOR1_TYPE ?= OV_OS08A20_MIPI_8M_30FPS_12BIT
+SENSOR2_TYPE ?= OV_OS08A20_MIPI_8M_30FPS_12BIT
+SENSOR3_TYPE ?= OV_OS08A20_MIPI_8M_30FPS_12BIT
+
+MPI_LIBS := -L$(REL_LIB) -lmpp_media
+
+ifeq ($(CONFIG_OT_ISP_SUPPORT), y)
+MPI_LIBS += -lmpp_media -lmpp_codec -lmpp_isp -lmpp_audio -lmpp_sec
+MPI_LIBS += -lsns_hy_s0603
+MPI_LIBS += -lsns_os08a20
+endif
+
+
+COMMON_DIR ?= $(PWD)/../common
+ifeq ($(CONFIG_OT_AUDIO_SUPPORT), y)
+AUDIO_ADP_DIR ?= $(PWD)/../audio/adp
+endif
+
+INC_FLAGS := -I$(REL_INC)
+INC_FLAGS += -I$(REL_INC) -I$(AUTO_CONF_INC)
+INC_FLAGS += -I$(SDK_PATH)/$(EXTDRV)/es8388
+INC_FLAGS += -I$(SDK_PATH)/$(EXTDRV)/lt8618sx
+
+ISP_VERSION := ISP_V2
+
+CFLAGS += -Wall -g $(INC_FLAGS) -D$(OT_ARCH) -D$(OT_FPGA) -lpthread -lm -ldl -D$(ISP_VERSION)
+ifeq ($(CONFIG_LIBC_TYPE),glibc)
+CFLAGS += -lstdc++
+else
+CFLAGS += -lc++ -lc
+endif
+
+CFLAGS += $(LIBS_CFLAGS)
+CFLAGS += $(LIBS_EXEC_CFLAGS)
+CFLAGS += $(MPP_CFLAGS)
+CFLAGS += -DSENSOR0_TYPE=$(SENSOR0_TYPE)
+CFLAGS += -DSENSOR1_TYPE=$(SENSOR1_TYPE)
+CFLAGS += -DSENSOR2_TYPE=$(SENSOR2_TYPE)
+CFLAGS += -DSENSOR3_TYPE=$(SENSOR3_TYPE)
+
+ifeq ($(MEM_SHARE), y)
+	CFLAGS += -DSAMPLE_MEM_SHARE_ENABLE
+endif
+
+################ select audio codec type for your sample ################
+#external acodec
+#ACODEC_TYPE ?= ACODEC_TYPE_ES8388
+ACODEC_TYPE ?= ACODEC_TYPE_INNER
+INNER_HDMI ?= y
+
+ifeq ($(ACODEC_TYPE), ACODEC_TYPE_ES8388)
+	CFLAGS += -DOT_ACODEC_TYPE_ES8388
+endif
+
+ifeq ($(INNER_HDMI), y)
+	CFLAGS += -DOT_ACODEC_TYPE_HDMI
+endif
+
+ifeq ($(ACODEC_TYPE), ACODEC_TYPE_INNER)
+	CFLAGS += -DOT_ACODEC_TYPE_INNER
+endif
+
+ifeq ($(CONFIG_OT_AUDIO_SUPPORT), y)
+################ select audio module library type for your sample ################
+AUDIO_MODULE_LIB_TYPE ?= AUDIO_LIB_TYPE_STATIC
+#AUDIO_MODULE_LIB_TYPE ?= AUDIO_LIB_TYPE_SHARE
+ifeq ($(AUDIO_MODULE_LIB_TYPE), AUDIO_LIB_TYPE_STATIC)
+##### VQE #####
+	CFLAGS += -DOT_VQE_USE_STATIC_MODULE_REGISTER
+##### AAC #####
+	CFLAGS += -DOT_AAC_USE_STATIC_MODULE_REGISTER
+	CFLAGS += -DOT_AAC_HAVE_SBR_LIB
+endif
+endif
+
+################ config gyro dis for your sample ################
+GYRO_DIS ?= n
+
+ifeq ($(GYRO_DIS), y)
+	CFLAGS += -DOT_GYRODIS_SUPPORT
+endif
+
+#########################################################################
+#COMM_SRC := $(wildcard $(COMMON_DIR)/*.c)
+# 只编 audio / hdmi 两个样例真正用到的公共代码（isp/vi/venc/region/mipi_tx 已不再需要）
+COMM_SRC := $(wildcard $(COMMON_DIR)/sample_comm_sys.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_vo.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_vpss.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_vdec.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/loadbmp.c)
+ifeq ($(CONFIG_OT_AUDIO_SUPPORT), y)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_audio.c)
+endif
+ifeq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sdk_exit.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sdk_init.c)
+endif
+COMM_OBJ := $(COMM_SRC:%.c=%.o)
+COMM_INC := -I$(COMMON_DIR)
+ifeq ($(CONFIG_OT_AUDIO_SUPPORT), y)
+COMM_INC += -I$(AUDIO_ADP_DIR)
+endif
+
+
+MEDIA_MSG_CLIENT_SRC := $(wildcard $(COMMON_DIR)/media_msg/client/*.c)
+MEDIA_MSG_CLIENT_OBJ := $(MEDIA_MSG_CLIENT_SRC:%.c=%.o)
+
+MEDIA_MSG_SERVER_SRC := $(wildcard $(COMMON_DIR)/media_msg/server/*.c)
+MEDIA_MSG_SERVER_OBJ := $(MEDIA_MSG_SERVER_SRC:%.c=%.o)
+
+MEDIA_MSG_INC := -I$(COMMON_DIR)/media_msg/include
+MEDIA_MSG_INC += -I$(SDK_PATH)/ot_syslink/ipcmsg/include
+MEDIA_MSG_INC += -I$(SDK_PATH)/ot_syslink/datafifo/include
+
+ifeq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
+SDK_LIB_PATH := -L$(REL_LIB) -L$(REL_LIB)/extdrv
+# so-trim: libmpp_ai.so (NPU/AI) 仅 SVP 场景保留，Sensor 侧不链接该库，也不再需要 libprotobuf-c / libaiv。
+SDK_LIB := $(SDK_LIB_PATH) -lmpp_media -lmpp_codec -lmpp_isp -lmpp_audio -lmpp_sec
+
+ifeq ($(CONFIG_OT_AUDIO_SUPPORT),y)
+# so-merge: libaudio.so was a strict subset of the audio category library.
+SDK_LIB += -lmpp_audio
+endif
+
+ifeq ($(GYRO_DIS),y)
+SDK_LIB +=	-l$(KO_PREFIX)_spi
+SDK_LIB +=	-lmotionsensor_mng
+SDK_LIB +=	-lmotionsensor_chip
+endif
+
+ifeq ($(CONFIG_OT_HEIF_SUPPORT),y)
+SDK_LIB += -lheif
+SDK_LIB += -lfileformat
+endif
+
+endif
+
+# 本板显示走 FB 模式：init.d/S82ohos 用 "-display fb" 加载 gfbg.ko + ot_vo.ko，
+# 之前的内核模块列表里也只有 gfbg、没有 smart_drm。sample 的 VO 通路用的是
+# ss_mpi_vo_*（ot_vo.ko），跟 DRM 无关。
+#
+# 原实现无条件加了这个宏，而 sample_hdmi.c 在 main 入口就有
+#     #ifdef DRM_OPTION_ENABLE
+#         printf("sample DONOT support DRM!\n");
+#         return 0;
+#     #endif
+# 等于把 HDMI 样例直接废掉。若将来真的切到 DRM 显示，再把它打开。
+# CFLAGS += -DDRM_OPTION_ENABLE

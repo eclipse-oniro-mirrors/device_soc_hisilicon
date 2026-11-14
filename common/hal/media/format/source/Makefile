@@ -10,8 +10,8 @@ FILEFORMAT_LIB_DIR := $(MIDDLEWARE_COMPONENT)/fileformat/common/lib/$(SOURCE_CHI
 
 APP_INC :=
 APP_INC += -I$(MIDDLEWARE_COMMON_INC_DIR) \
-           -I$(SECUREC_INC_PATH) \
-           -I$(MPP_INC_PATH) \
+           -I$(SECUREC_INC_PATH) -I$(MPP_CFG_INC_PATH) \
+           -I$(MPP_INC_PATH) -I$(MPP_CFG_INC_PATH) \
            -I$(MEDIA_HAL_COMMN_INC_PATH)\
            -I$(SS_DEMUXER_INC_DIR)\
            -I$(FORMAT_INTERFACE_PATH)

@@ -22,7 +22,7 @@ INC_PATH     := $(sort $(dir $(shell find $(INC_ROOT) -name '*.h')))
 
 SRC_DEPS_INC_PATH := $(foreach dir, $(INC_PATH), -I$(dir))
 SRC_DEPS_INC_PATH += -I$(CODEC_INCLUDE)\
-                     -I$(MPP_INC_PATH)\
+                     -I$(MPP_INC_PATH) -I$(MPP_CFG_INC_PATH)\
                      -I$(MEDIA_HAL_COMMN_INC_PATH)\
                      -I$(COMM_INC_DIR)\
                      -I$(CODEC_DIR)/src/pluginManager/codec_plugin_base \
@@ -44,7 +44,7 @@ LDFLAGS_SO := $(LDFLAGS)
 
 ifeq ($(filter $(CFG_CHIP_TYPE),hi3403v100),$(CFG_CHIP_TYPE))
 CFLAGS_CUR += -D__SS626V100__
-SRC_DEPS_LIB += -lmedia_hal_common -lss_mpi -lss_dnvqe -lss_upvqe -laac_enc -laac_comm  -lss_voice_engine -lsecurec -lpthread -ldl -lm
+SRC_DEPS_LIB += -lmedia_hal_common -lmpp_audio -lmpp_media -lsecurec -lpthread -ldl -lm
 else
 SRC_DEPS_LIB += -lmedia_hal_common -lss_mpi -lss_mpi_audio -lss_mpi_sysbind -ldnvqe -lupvqe -laac_enc -laac_comm  -lvoice_engine -lsecurec -lpthread -ldl -lm
 endif

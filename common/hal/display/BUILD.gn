@@ -20,6 +20,7 @@ if (defined(ohos_lite)) {
     board_name == "hispark_hi3519dv500") {
     mpp_arch = ""
     sdk_include_dir = ""
+    sdk_config_include_dirs = []
     sdk_lib_dir = ""
     bt1120_support = false
     hdmi_support = true
@@ -82,8 +83,9 @@ if (defined(ohos_lite)) {
       ]
     } else {
       mpp_arch = "h8"
-      sdk_include_dir = "${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/include"
-      sdk_lib_dir = "//device/soc/hisilicon/hi3403v100/sdk_linux:hispark_aifly_sdk"
+      sdk_include_dir = "${root_out_dir}/sdk_linux/src_tmp/hardware/include"
+      sdk_config_include_dirs = [ "${root_out_dir}/sdk_linux/src_tmp/config/clang" ]
+      sdk_lib_dir = "//device/soc/hisilicon/hi3403v100:hispark_aifly_sdk"
       if (device_hispark_aifly_display_type == "mipi") {
         hdmi_support = false
         mipi_support = true
@@ -93,31 +95,22 @@ if (defined(ohos_lite)) {
         mipi_support = false
         disenalbe_disp = true
       }
-      sdk_lib_path = rebase_path("${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/lib")
+      sdk_lib_path = rebase_path("${root_out_dir}/sdk_linux/src_tmp/hardware/lib")
+      print("[SDK-PATH][GN] display: root_out_dir    = " + root_out_dir)
+      print("[SDK-PATH][GN] display: sdk_include_dir = " + sdk_include_dir)
+      print("[SDK-PATH][GN] display: sdk_lib_path    = " + sdk_lib_path)
       display_layer_lib = [
         "-L${sdk_lib_path}",
-        "-lss_mpi",
-        "-lss_voice_engine",
-        "-lss_hdmi",
-        "-lot_osal",
-        "-lot_base",
-        "-lot_sys",
-        "-lot_vo",
-        "-lot_rgn",
-        "-lot_irq",
+        "-lmpp_media",
       ]
-      vqe_lib = [
-        "-lss_dnvqe",
-        "-lss_upvqe"
-      ]
+      vqe_lib = []
       tde_lib = [
         "-L${sdk_lib_path}",
-        "-lss_tde"
+        "-lmpp_media"
       ]
       display_gralloc_lib = [
         "-L${sdk_lib_path}",
-        "-lss_mpi",
-        "-lss_voice_engine",
+        "-lmpp_media",
       ]
     }
     shared_library("display_layer") {
@@ -187,7 +180,7 @@ if (defined(ohos_lite)) {
       ]
 
       if (ohos_kernel_type == "linux") {
-        include_dirs += [ sdk_include_dir ]
+        include_dirs += [ sdk_include_dir ] + sdk_config_include_dirs
         deps += [ sdk_lib_dir ]
       }
 
@@ -237,7 +230,7 @@ if (defined(ohos_lite)) {
         "-Wno-format-extra-args",
       ]
 
-      include_dirs += [ sdk_include_dir ]
+      include_dirs += [ sdk_include_dir ] + sdk_config_include_dirs
       deps += [ sdk_lib_dir ]
 
       ldflags = tde_lib
@@ -276,7 +269,7 @@ if (defined(ohos_lite)) {
         "-Wno-format-extra-args",
       ]
 
-      include_dirs += [ sdk_include_dir ]
+      include_dirs += [ sdk_include_dir ] + sdk_config_include_dirs
       deps += [ sdk_lib_dir ]
 
       ldflags = display_gralloc_lib

@@ -164,21 +164,45 @@ ifeq ($(CFG_OS_TYPE),OHOS)
     endif
 else
     ifeq ($(filter $(CFG_CHIP_TYPE),hi3403v100),$(CFG_CHIP_TYPE))
-        SDK_ROOT := $(OHOS_OUT_DIR)/sdk_linux/src_tmp/smp/a55_linux/mpp
-        MPP_ROOT := $(SDK_ROOT)/out
-        SOURCE_CHIP_TYPE := ss928v100
+        SDK_ROOT := $(OHOS_OUT_DIR)/sdk_linux/src_tmp/hardware/mpp
+        MPP_ROOT := $(OHOS_OUT_DIR)/sdk_linux/src_tmp/hardware
+        SOURCE_CHIP_TYPE := hi3403v100
     else
         SDK_ROOT := $(PROJECT_ROOT)/device/soc/hisilicon/hi3516dv500/sdk_linux/smp/a55_linux/source
         SOURCE_CHIP_TYPE := hi3516dv500
     endif
-    MPP_ROOT := $(SDK_ROOT)/out
+    MPP_ROOT ?= $(SDK_ROOT)/out
 endif
 
 MPP_INC_PATH   := $(MPP_ROOT)/include
+ifeq ($(CFG_CHIP_TYPE),hi3403v100)
+MPP_CFG_INC_PATH := $(MPP_ROOT)/../config/clang
 MPP_LIB_PATH   := $(MPP_ROOT)/lib
+else
+MPP_CFG_INC_PATH := $(MPP_INC_PATH)
+MPP_LIB_PATH   := $(MPP_ROOT)/lib
+endif
 
 SECUREC_INC_PATH := $(MPP_INC_PATH)
 SECUREC_LIB_PATH := $(MPP_LIB_PATH)
+
+# ===== 临时诊断：SDK 路径链路（排查 -lsecurec，定位完删除）=====
+SDK_DBG_STAGE_LIB := $(OHOS_OUT_DIR)/sdk_linux/src_tmp/hardware/lib
+$(info [SDK-PATH][MK] module dir       = $(CURDIR))
+$(info [SDK-PATH][MK] chip             = $(CFG_CHIP_TYPE) / $(SOURCE_CHIP_TYPE))
+$(info [SDK-PATH][MK] OHOS_OUT_DIR     = $(OHOS_OUT_DIR))
+$(info [SDK-PATH][MK] SDK_ROOT         = $(SDK_ROOT))
+$(info [SDK-PATH][MK] MPP_ROOT         = $(MPP_ROOT))
+$(info [SDK-PATH][MK] MPP_INC_PATH     = $(MPP_INC_PATH))
+$(info [SDK-PATH][MK] MPP_CFG_INC_PATH = $(MPP_CFG_INC_PATH))
+$(info [SDK-PATH][MK] MPP_LIB_PATH     = $(MPP_LIB_PATH))
+$(info [SDK-PATH][MK] SECUREC_LIB_PATH = $(SECUREC_LIB_PATH))
+$(info [SDK-PATH][MK] stage lib 字面值 = $(SDK_DBG_STAGE_LIB))
+$(info [SDK-PATH][MK] securec.h        = $(if $(wildcard $(SECUREC_INC_PATH)/securec.h),FOUND,NOT-FOUND))
+$(info [SDK-PATH][MK] libsecurec.*     = $(or $(notdir $(wildcard $(SECUREC_LIB_PATH)/libsecurec.*)),NOT-FOUND))
+$(info [SDK-PATH][MK] lib dir *.so     = $(or $(notdir $(wildcard $(MPP_LIB_PATH)/*.so)),DIR-EMPTY))
+$(info [SDK-PATH][MK] inc dir *.h 数量 = $(words $(wildcard $(MPP_INC_PATH)/*.h)))
+# ===== 临时诊断结束 =====
 
 CreateDir = $(shell [ -d $1 ] || mkdir -p $1 || echo ":mkdir '$1' fail")
 RemoveDir = $(shell [ -d $1 ] && rm -rf $1 && echo -e "rmdir '$1'\t [ OK ]" || echo ":rm dir '$1' fail")

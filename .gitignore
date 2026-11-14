@@ -9,3 +9,8 @@ hi3861v100/sdk_liteos/.sconsign.dblite
 hi3861v100/sdk_liteos/build/libs/**
 ws63v100/sdk/output/**
 ws63v100/sdk/application/ws63/ws63_liteos_mfg/**/*.bin
+
+common/hal/media/audio/hi3403v100
+common/hal/media/codec/hi3403v100
+common/hal/media/common/hi3403v100
+common/hal/media/format/hi3403v100
