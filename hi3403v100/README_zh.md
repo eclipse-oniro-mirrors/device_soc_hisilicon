@@ -12,7 +12,8 @@
 
 ## 简介
 
-Hi3403V100 是上海海思推出的高性能智能视觉芯片。本目录为 HiSpark AiFly 开发板提供芯片侧软件，向下封装芯片驱动与海思预编译二进制，向上为 OpenHarmony 的图形、媒体、AI、安全子系统提供南向实现，覆盖音视频采集与编解码、视频前处理、封装解封装、存储管理与日志等能力。系统类型为小型系统（Small System）。
+Hi3403V100 是上海海思推出的高性能智能视觉芯片。本目录为 HiSpark AiFly 开发板芯片 Hi3403V100 在社区仓 `device_soc_hisilicon` 中的芯片子目录，向下封装芯片驱动与海思预编译二进制，向上为 OpenHarmony 的图形、媒体、AI、安全子系统提供南向实现，覆盖音视频采集与编解码、视频前处理、封装解封装、存储管理与日志等能力。系统类型为小型系统（Small System）。
+
 
 ### 主控芯片介绍
 
@@ -35,18 +36,19 @@ Hi3403V100 是一颗面向视觉领域推出的专业 Ultra-HD Smart IP Camera S
 ## 目录结构
 
 ```bash
+├── bootloader                  # U-Boot / ATF 固件
+├── BUILD.gn                    # 编译入口 GN 文件
+├── build.sh                    # 构建入口
+├── config                      # 编译配置
 ├── docs/zh-CN                  # 专题文档
-├── hdf_driver                  # HDF 驱动适配（display、mipi_dsi）
-├── sdk_linux                   # 芯片 SDK
-│   ├── BUILD.gn                # 编译入口 GN 文件
-│   ├── build.sh                # SDK 编译入口（编译 ko、ATF 等）
-│   ├── open_source             # 开源组件（linux、u-boot、trusted-firmware-a、mbedtls）
-│   ├── osdrv                   # 驱动组件与工具
-│   └── smp/a55_linux
-│       ├── interdrv            # 芯片驱动接口（mipi_rx、mipi_tx、sysconfig 等）
-│       ├── mpp                 # MPP 媒体处理平台（cbb、component、sample 等）
-│       └── osal                # 系统适配层
-└── uboot                       # U-Boot / ATF 固件
+├── hardware
+│   ├── include                 # 对外头文件
+│   ├── interdrv                # 芯片驱动接口
+│   ├── lib                     # 预编译库
+│   ├── mpp                     # MPP 内核态源码
+│   ├── osal                    # 系统适配层
+│   └── sensor                  # Sensor 驱动
+└── modules                     # 内核模块
 ```
 
 ## 基础能力
@@ -60,7 +62,7 @@ Hi3403V100 是一颗面向视觉领域推出的专业 Ultra-HD Smart IP Camera S
 
 ## 典型产品
 
-- [开发板使用教程](https://gitcode.com/openharmony-sig/device_board_hisilicon_hispark_aifly/blob/master/hispark_aifly/README_zh.md)
+- [开发板使用教程](https://gitcode.com/openharmony/device_board_hisilicon/blob/master/hispark_aifly/README_zh.md)
 - [IP摄像机](./docs/zh-CN/ipc-product.md)
 
 ## 外设开发
@@ -87,19 +89,19 @@ Hi3403V100 是一颗面向视觉领域推出的专业 Ultra-HD Smart IP Camera S
 
 以下开源组件采用 GPL-2.0，各组件许可声明的出处见括号内说明：
 
-- **Linux 内核**（Linux-6.6）：内核源码取自 OpenHarmony 社区仓 kernel_linux，许可遵循社区仓声明
-- **U-Boot**：随 `uboot/` 以二进制形式分发，开源软件声明见本仓 `NOTICE` 中 "Das U-Boot 2020.01" 条目
-- **MPP 媒体处理平台**（component、sample、cbb 等）：`sdk_linux/smp/a55_linux/mpp/` 下各模块的 `LICENSE`
-- **OSAL 系统适配层**：`sdk_linux/smp/a55_linux/osal/LICENSE`
-- **interdrv 外设驱动**（MIPI RX/TX、sysconfig 等）：`sdk_linux/smp/a55_linux/interdrv/LICENSE`
+- **Linux 内核**（Linux-6.6）：内核源码与适配补丁取自 OpenHarmony 社区仓 kernel_linux / kernel_linux_patches，构建时由板级 `kernel.mk` 自动应用，许可遵循社区仓声明
+- **U-Boot**：随 `bootloader/` 以二进制形式分发，开源软件声明见本仓 `NOTICE` 中 "Das U-Boot 2020.01" 条目
+- **MPP 媒体处理平台**（component、cbb 等）：`hardware/mpp/component/LICENSE`、`hardware/mpp/cbb/LICENSE`
+- **OSAL 系统适配层**：`hardware/osal/LICENSE`
+- **interdrv 外设驱动**（MIPI RX/TX、sysconfig 等）：`hardware/interdrv/LICENSE`
 
 ### BSD 3-Clause License
 
-- **Trusted Firmware-A (TF-A)**：ARM 安全固件（源码位于 `sdk_linux/open_source/trusted-firmware-a/`，编译产物 fip.bin 随 `uboot/` 分发），采用 BSD 3-Clause。
+- **Trusted Firmware-A (TF-A)**：ARM 安全固件。本仓不含 TF-A 源码，TF-A 以预编译形式集成于 `bootloader/fip.bin` 固件中，遵循上游 BSD 3-Clause 许可。
 
 ### 兼容性说明
 
-- 本目录包含其它开源软件组件，各组件遵循其各自的开源许可声明；
+- 本仓包含其它开源软件组件，各组件遵循其各自的开源许可声明；
 - 若开源组件许可与本项目许可冲突，以该组件许可为准；
 - 使用本项目代码时，请遵守相应许可证的要求和限制。
 
@@ -108,9 +110,4 @@ Hi3403V100 是一颗面向视觉领域推出的专业 Ultra-HD Smart IP Camera S
 - [device_soc_hisilicon](https://gitcode.com/openharmony/device_soc_hisilicon)（本仓）
 - [device_board_hisilicon](https://gitcode.com/openharmony/device_board_hisilicon)
 - [vendor_hisilicon](https://gitcode.com/openharmony/vendor_hisilicon)
-
-HiSpark AiFly 解决方案 SIG 仓：
-
-- [device_soc_hisilicon_hispark_aifly](https://gitcode.com/openharmony-sig/device_soc_hisilicon_hispark_aifly)
-- [device_board_hisilicon_hispark_aifly](https://gitcode.com/openharmony-sig/device_board_hisilicon_hispark_aifly)
-- [vendor_hisilicon_hispark_aifly](https://gitcode.com/openharmony-sig/vendor_hisilicon_hispark_aifly)
+- [kernel_linux_patches](https://gitcode.com/openharmony/kernel_linux_patches)

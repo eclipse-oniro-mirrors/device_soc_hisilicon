@@ -10,7 +10,7 @@
 
 ### 1.1 放置 Sensor 驱动源码
 
-源码放置在 `device/soc/hisilicon/hi3403v100/sdk_linux/smp/a55_linux/mpp/sample/<sensor_dir>` 下，可参考同目录已有的 `omnivision_os08a20`、`hy_s0603` 工程。
+源码放置在 `device/soc/hisilicon/hi3403v100/hardware/sensor/<sensor_dir>` 下，可参考同目录已有的 `omnivision_os08a20`、`hy_s0603` 工程。
 
 ![sensor源码目录](./figures/sensor_sample_dir.png)
 
@@ -32,13 +32,14 @@ $(TARGETLIB_SO):$(OBJS)
 
 ### 1.3 增加 Sensor 编译入口
 
-在 `device/soc/hisilicon/hi3403v100/sdk_linux/smp/a55_linux/mpp/out/obj/Makefile` 中，仿照现有 Sensor 工程的编译条目，增加新 Sensor 工程的编译步骤：
+在 `device/soc/hisilicon/hi3403v100/build.sh` 的传感器库编译循环（`for s in hy_s0603 omnivision_os08a20`）中，仿照现有条目增加新 Sensor 工程的编译步骤：
 
-```makefile
-@cd $(SDK_PATH)/mpp/sample/<sensor_dir>; make -j
+```sh
+for s in hy_s0603 omnivision_os08a20 <sensor_dir>; do
 ```
 
-> `<sensor_dir>`：Sensor 源码目录名（对应源码目录为 `sdk_linux/smp/a55_linux/mpp/sample/<sensor_dir>`）；clean 段中还需同步增加 `@cd $(SDK_PATH)/mpp/sample/<sensor_dir>; make clean` 清理条目。
+> `<sensor_dir>`：Sensor 源码目录名（对应源码目录为 `hardware/sensor/<sensor_dir>`）。
+> 注：下图截自旧目录结构下的 `out/obj/Makefile`，仅示意条目形式；新目录结构请按上述 `build.sh` 循环添加。
 
 ![out/obj/Makefile](./figures/sensor_build_entry.png)
 

@@ -13,7 +13,7 @@ MindSpore Lite 组件已集成到 Hi3403V100 小型系统的默认构建中，�
 > ```bash
 > ./build.sh --product-name ipcamera_hispark_aifly_linux --ccache --prebuilt-sdk sdk_platform=default
 > ```
-> 该命令在 OpenHarmony 源码根目录执行。`--prebuilt-sdk` 用于编译生成 ohos-sdk（[开发板使用教程](https://gitcode.com/openharmony-sig/device_board_hisilicon_hispark_aifly/blob/master/hispark_aifly/README_zh.md)中默认使用的 `--no-prebuilt-sdk` 则为跳过 SDK 编译以缩短构建时间）；若所用构建框架版本不支持该参数，可直接通过下方每日构建方式获取 ohos-sdk。
+> 该命令在 OpenHarmony 源码根目录执行。`--prebuilt-sdk` 用于编译生成 ohos-sdk（[开发板使用教程](https://gitcode.com/openharmony/device_board_hisilicon/blob/master/hispark_aifly/README_zh.md)中默认使用的 `--no-prebuilt-sdk` 则为跳过 SDK 编译以缩短构建时间）；若所用构建框架版本不支持该参数，可直接通过下方每日构建方式获取 ohos-sdk。
 > 或者从[每日构建](https://ci.openharmony.cn/workbench/cicd/dailybuild/dailylist)中下载对应的`ohos-sdk-full_6.1-LTS`
 
 设置环境变量：

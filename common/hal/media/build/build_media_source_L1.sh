@@ -57,15 +57,15 @@ function main(){
     fi
     # Todo: middleware lib chip type
 if [ "$CHIP" = "hi3403v100" ];then
-    CHIP_TYPE=ss928v100
+    CHIP_TYPE=hi3403v100
 else
     CHIP_TYPE=hi3516dv500
 fi
     sed -i "/^CFG_OS_TYPE=/cCFG_OS_TYPE=$OS_TYPE" $(pwd)/build/cfg.mak
 
     pushd .
-    make clean
-    make -j1 VERBOSE=1
+    make clean SHELL=/bin/bash
+    make -j1 VERBOSE=1 SHELL=/bin/bash
     popd
     # Rootfs依赖本模块的库
     ROOT_DIR=$(cd $(dirname "$0")/../;pwd)
@@ -82,6 +82,21 @@ fi
     cp $ROOT_DIR/../middleware/source/component/liteplayer/lib/$CHIP_TYPE/$COMPILE_TYPE/libmpf_demuxer.so $OHOS_OUT_DIR/
     cp $ROOT_DIR/../middleware/source/component/liteplayer/lib/$CHIP_TYPE/$COMPILE_TYPE/libplugin_vdec_35xx.so $OHOS_OUT_DIR/
     cp $ROOT_DIR/../middleware/source/component/liteplayer/lib/$CHIP_TYPE/$COMPILE_TYPE/libplugin_adec_35xx.so $OHOS_OUT_DIR/
+    # Update DT_NEEDED of the prebuilt plugins to the merged library.
+    if command -v patchelf > /dev/null 2>&1; then
+        for so in libplugin_vdec_35xx.so libplugin_adec_35xx.so; do
+            [ -f "$OHOS_OUT_DIR/$so" ] || continue
+            for old in libaac_comm.so libaac_dec.so libaac_sbr_dec.so libaac_sbr_enc.so \
+                       libss_dnvqe.so libss_upvqe.so libss_voice_engine.so; do
+                if patchelf --print-needed "$OHOS_OUT_DIR/$so" 2>/dev/null | grep -qx "$old"; then
+                    patchelf --replace-needed "$old" libmpp_audio.so "$OHOS_OUT_DIR/$so"
+                fi
+            done
+            echo "patched $so"
+        done
+    else
+        echo "WARNING: patchelf not found, vdec/adec plugin NEEDED not rewritten"
+    fi
     cp $ROOT_DIR/../middleware/source/component/liteplayer/lib/$CHIP_TYPE/$COMPILE_TYPE/libavplay_common.so $OHOS_OUT_DIR/
     cp $ROOT_DIR/../middleware/source/component/otconfaccess/lib/$CHIP_TYPE/$COMPILE_TYPE/libotconfaccess.so $OHOS_OUT_DIR/
     cp $ROOT_DIR/../middleware/source/component/dtcf/lib/$CHIP_TYPE/$COMPILE_TYPE/libdtcf.so $OHOS_OUT_DIR/

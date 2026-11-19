@@ -17,7 +17,7 @@ MW_COMMON_INC_PATH := $(MEDIA_BASE_DIR)/../middleware/source/common/include/
 
 SRC_DEPS_INC_PATH := -I$(AUDIO_HAL_INC_PATH)
 SRC_DEPS_INC_PATH += -I$(AUDIO_DRIVERS_INC_PATH)\
-                     -I$(MPP_INC_PATH)\
+                     -I$(MPP_INC_PATH) -I$(MPP_CFG_INC_PATH)\
                      -I$(AUDIO_PORT_PLUGIN_COM_INC_PATH)\
                      -I$(MEDIA_HAL_COMMN_INC_PATH) \
                      -I$(AUDIO_INTERFACE_PATH) \
@@ -26,7 +26,7 @@ SRC_DEPS_INC_PATH += -I$(AUDIO_DRIVERS_INC_PATH)\
                      -I$(AUDIO_SUB_PORT_OUT_INC_PATH) \
                      -I$(OTCONFACCESS_INC_PATH) \
                      -I$(MW_COMMON_INC_PATH) \
-                     -I$(SECUREC_INC_PATH)
+                     -I$(SECUREC_INC_PATH) -I$(MPP_CFG_INC_PATH)
 
 ALSA_INC_PATH := \
     -I$(THIRDPARTY_DIR)/alsa-lib/include
@@ -54,7 +54,7 @@ CFLAGS_CUR := $(CFLAGS) -fdata-sections -fno-omit-frame-pointer
 LDFLAGS_SO := $(LDFLAGS)
 
 CFLAGS_CUR += -D__SS626V100__ -D__LINUX__
-SRC_DEPS_LIB +=	-lmedia_hal_common -lss_mpi -lsecurec -lpthread -ldl -lm -lmwlog -lotconfaccess  -laac_sbr_enc -laac_sbr_dec -lvqe_record -lvqe_res -lss_otp
+SRC_DEPS_LIB +=	-lmedia_hal_common -lsecurec -lpthread -ldl -lm -lmwlog -lotconfaccess -lmpp_media
 USB_ALSA_LIB_PATH := $(OHOS_OUT_DIR)
 SRC_DEPS_LIB += -lasound
 SRC_DEPS_LIB_PATH += -L$(MPP_LIB_PATH)\
@@ -62,8 +62,8 @@ SRC_DEPS_LIB_PATH += -L$(MPP_LIB_PATH)\
                      -L$(MEDIA_HAL_COMMN_LIB_PATH) \
                      -L$(USB_ALSA_LIB_PATH)
 
-SRC_DEPS_LIB_PATH += -L$(MEDIA_BASE_DIR)/../middleware/source/component/otconfaccess/lib/ss928v100/clang_musl \
-                     -L$(MEDIA_BASE_DIR)/../middleware/source/common/log/lib/ss928v100/clang_musl
+SRC_DEPS_LIB_PATH += -L$(MEDIA_BASE_DIR)/../middleware/source/component/otconfaccess/lib/hi3403v100/clang_musl \
+                     -L$(MEDIA_BASE_DIR)/../middleware/source/common/log/lib/hi3403v100/clang_musl
 
 ifeq ($(CFG_OS_TYPE),OHOS)
 SRC_DEPS_LIB_PATH += -L$(OUT_DIR)/$(CFG_CHIP_TYPE)/ipcamera_$(CFG_CHIP_TYPE)_liteos \

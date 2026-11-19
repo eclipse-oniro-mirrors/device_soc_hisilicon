@@ -228,21 +228,6 @@ static td_s32 common_mod_init()
         HAL_LOGE("rgn init error.\n");
     }
     struct {
-        td_u32 u32_max_gdc_job;
-        td_u32 u32_max_gdc_task;
-        td_u32 u32_max_gdc_node;
-        td_u32 au32_gdc_en[1];
-    } gdcModuleParam;
-    gdcModuleParam.u32_max_gdc_job  = 32; /* 32 -- max job num */
-    gdcModuleParam.u32_max_gdc_task  = 64; /* 64 -- max task num */
-    gdcModuleParam.u32_max_gdc_node  = 64; /* 64 -- max node num */
-    gdcModuleParam.au32_gdc_en[0]   = 1;
-    ret = ot_gdc_mod_init(&gdcModuleParam);
-    if (ret != 0) {
-        HAL_LOGE("gdc init error.\n");
-    }
-
-    struct {
         td_u32 max_vgs_job;
         td_u32 max_vgs_task;
         td_u32 max_vgs_node;
@@ -253,11 +238,6 @@ static td_s32 common_mod_init()
     ret = ot_vgs_mod_init(&vgsModuleParam);
     if (ret != 0) {
         HAL_LOGE("vgs init error.\n");
-    }
-
-    ret = ot_dis_mod_init();
-    if (ret != 0) {
-        HAL_LOGE("dis init error.\n");
     }
 
     ret = ot_vpp_mod_init();
@@ -316,21 +296,12 @@ static td_s32 business_mod_init()
         HAL_LOGE("H265e init error.\n");
     }
 
-    ret = ot_jpege_mod_init();
-    if (ret != 0) {
-        HAL_LOGE("jpege init error.\n");
-    }
     return ret;
 }
 
 static td_s32 business_mod_init1()
 {
     td_s32 ret;
-
-    ret = ot_jpegd_mod_init();
-    if (ret != 0) {
-        HAL_LOGE("jpegd init error.\n");
-    }
 
     ret = ot_vfmw_mod_init(32); /* 32 */
     if (ret != 0) {
@@ -395,8 +366,6 @@ td_void SDK_exit(void)
     AUDIO_exit();
     ot_vdec_mod_exit();
     ot_vfmw_mod_exit();
-    ot_jpegd_mod_exit();
-    ot_jpege_mod_exit();
     ot_h265e_mod_exit();
     ot_h264e_mod_exit();
     ot_venc_mod_exit();
@@ -407,10 +376,7 @@ td_void SDK_exit(void)
     ot_isp_mod_exit();
     ot_vi_mod_exit();
     ot_vpp_mod_exit();
-    ot_dis_mod_exit();
-    ot_vgs_mod_exit();
-    ot_gdc_mod_exit();
-    ot_rgn_mod_exit();
+    ot_vgs_mod_exit();    ot_rgn_mod_exit();
     ot_chnl_mod_exit();
     ot_sys_mod_exit();
     ot_base_mod_exit();
@@ -949,20 +915,25 @@ static void ConvetToControlInfo(ot_vpss_chn vpssChn, const StreamAttr *stream, C
     config->fps = stream->fps;
     config->width = stream->width;
     config->height = stream->height;
-    config->rotation.enable = TD_TRUE;
     config->rotation.rotation_type = OT_ROTATION_ANG_FIXED;
+    config->rotation.rotation_fixed = OT_ROTATION_0;
     if (stream->invertMode == HAL_HORIZONTAL_MIRROR) {
         config->isFlip = TD_TRUE;
     } else if (stream->invertMode == HAL_VETICALLY_MIRROR) {
         config->isMirror = TD_TRUE;
     } else if (stream->invertMode == HAL_ROTATION_90) {
+        // 仅在确有旋转角度时启用 VPSS rotation：0 度也走 GDC 通路，
+        // 而本板 MPP 裁剪后 libmpp_media 无 GDC 导出函数，会把整个
+        // CreateStream 打挂（预览蓝屏）。config 由调用方 {0} 初始化，
+        // 不启用时 rotation.enable 保持 TD_FALSE。
+        config->rotation.enable = TD_TRUE;
         config->rotation.rotation_fixed = OT_ROTATION_90;
     } else if (stream->invertMode == HAL_ROTATION_180) {
+        config->rotation.enable = TD_TRUE;
         config->rotation.rotation_fixed = OT_ROTATION_180;
     } else {
         config->isFlip = TD_FALSE;
         config->isMirror = TD_FALSE;
-        config->rotation.rotation_fixed = OT_ROTATION_0;
     }
 
     ConvertCrop(vpssChn, stream, config);
