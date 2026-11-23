@@ -10,7 +10,7 @@
 
 | 序号 | 文档 | 说明 |
 |------|------|------|
-| 1 | [HiSpark_AiFly开发板](https://gitcode.com/openharmony-sig/device_board_hisilicon_hispark_aifly/blob/master/hispark_aifly/README_zh.md) | 开发板规格、开发环境搭建、源码获取、构建编译、烧录方法（ToolPlatform工具和命令行两种方式）、快速体验（桌面展示、相机应用、媒体播放） |
+| 1 | [HiSpark_AiFly开发板](https://gitcode.com/openharmony/device_board_hisilicon/blob/OpenHarmony-6.1-LTS/hispark_aifly/README_zh.md) | 开发板规格、开发环境搭建、源码获取、构建编译、烧录方法（ToolPlatform工具和命令行两种方式）、快速体验（桌面展示、相机应用、媒体播放） |
 
 ### 小型系统移植案例
 
